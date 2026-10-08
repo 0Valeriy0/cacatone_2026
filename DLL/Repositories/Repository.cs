@@ -15,6 +15,7 @@ namespace DLL.Repositories
         }
         public async Task AddQuestionAsync(Question question, Test test)
         {
+            test.Questions.Add(question);
             _context.Questions.Add(question);
             await _context.SaveChangesAsync();
         }
@@ -25,11 +26,13 @@ namespace DLL.Repositories
         }
         public async Task AddAnswerAsync(Answer answer, Question question)
         {
+            question.AllAnswers.Add(answer);   
             _context.Answers.Add(answer);
             await _context.SaveChangesAsync();
         }
         public async Task AddTestResultAsync(TestResult testResult, Test test)
         {
+            test.TestResult = testResult;
             _context.TestResults.Add(testResult);
             await _context.SaveChangesAsync();
         }
