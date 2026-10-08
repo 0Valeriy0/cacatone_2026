@@ -1,4 +1,13 @@
-﻿<!DOCTYPE html>
+@* 
+    SmartTest — Освітня платформа багатовимірного AI-профілювання та вердиктів
+    Чистий Razor (.cshtml) + CSS без React/Node.js залежностей
+*@
+@{
+    Layout = null;
+    ViewData["Title"] = "SmartTest — Багатовимірне AI-профілювання та вердикти";
+}
+
+<!DOCTYPE html>
 <html lang="uk">
 <head>
     <meta charset="utf-8" />
@@ -12,7 +21,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
     <!-- Підключення стилів -->
-    <link rel="stylesheet" href="~/style.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/style.css" />
 </head>
 <body>
@@ -35,9 +44,9 @@
     <!-- 1. Header (Шапка сайту) -->
     <header class="site-header">
         <div class="container header-container">
-
+            
             <!-- Зліва: Логотип "SmartTest" з іконкою (#8a00c2) та підписом -->
-            <a href="#" class="logo">
+            <a href="/" class="logo">
                 <div class="logo-icon-box">
                     <div class="logo-icon-inner">
                         <!-- Іконка нейромережі / мізку -->
@@ -62,10 +71,11 @@
             <nav class="nav-menu">
                 <a href="#hero" class="nav-link active">Головна</a>
                 <a href="#directions" class="nav-link">Напрямки</a>
-                <a href="#matrices" class="nav-link">Матриці</a>
-                <a href="#verdicts" class="nav-link">
-                    AI-вердикти
+                <a href="/drafts" class="nav-link" style="position: relative;">
+                    Чернетки
+                    <span style="display: inline-block; width: 7px; height: 7px; background: #8a00c2; border-radius: 9999px; margin-left: 4px; vertical-align: top;"></span>
                 </a>
+                <a href="/result" class="nav-link">AI-вердикти</a>
                 <a href="#methodology" class="nav-link">Про платформу</a>
             </nav>
 
@@ -80,13 +90,13 @@
                 </div>
 
                 <!-- Суцільна кнопка "Увійти" з іконкою профілю (#8a00c2, білий текст) -->
-                <button type="button" class="btn-login" onclick="alert('Форма входу до особистого кабінету SmartTest')">
+                <a href="/login" class="btn-login" style="text-decoration: none;">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                         <circle cx="12" cy="7" r="4"></circle>
                     </svg>
                     <span>Увійти</span>
-                </button>
+                </a>
             </div>
 
         </div>
@@ -94,14 +104,28 @@
 
     <!-- Main Content -->
     <main>
-
+        
         <!-- 2. Hero Section (Головний блок) -->
         <section id="hero" class="hero-section">
             <div class="container">
                 <div class="hero-grid">
-
+                    
                     <!-- Ліва колонка (Текст та CTA) -->
                     <div class="hero-content">
+                        
+                        <!-- Банер збереженої чернетки (якщо є) -->
+                        <div id="quickDraftBanner" style="display: none; background: #faf5ff; border: 1.5px solid #d8b4fe; border-radius: 14px; padding: 10px 16px; margin-bottom: 20px; align-items: center; justify-content: space-between; gap: 12px; box-shadow: 0 2px 10px rgba(138,0,194,0.06);">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="font-size: 16px;">📝</span>
+                                <div>
+                                    <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.6px; color: #8a00c2; display: block;">АКТИВНА ЧЕРНЕТКА В РОБОТІ</span>
+                                    <span style="font-size: 13px; font-weight: 700; color: #0f172a;" id="quickDraftTitle">Оцінка лідерського потенціалу в IT-стартапах</span>
+                                </div>
+                            </div>
+                            <a href="/drafts" style="font-size: 12px; font-weight: 800; color: #8a00c2; text-decoration: none; display: flex; align-items: center; gap: 4px; padding: 6px 12px; background: #ffffff; border-radius: 8px; border: 1px solid #e4b6ff; white-space: nowrap;">
+                                <span>Відкрити чернетку -></span>
+                            </a>
+                        </div>
 
                         <!-- Бейдж (tag) з іконкою мізку/нейромережі та текстом "НЕМАЄ ПРАВИЛЬНИХ ВІДПОВІДЕЙ" -->
                         <div class="hero-tag">
@@ -113,11 +137,11 @@
 
                         <!-- Великий заголовок (H1) -->
                         <h1 class="hero-title">
-                            Дізнайся свій справжній потенціал —
+                            Дізнайся свій справжній потенціал — 
                             <span class="hero-title-highlight">
                                 отримай багатовимірний AI-вердикт!
                                 <svg class="hero-wave-svg" viewBox="0 0 300 12" fill="none" preserveAspectRatio="none">
-                                    <path d="M1 9C50 2 100 12 150 6C200 1 250 11 299 4" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+                                    <path d="M1 9C50 2 100 12 150 6C200 1 250 11 299 4" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
                                 </svg>
                             </span>
                         </h1>
@@ -130,16 +154,16 @@
                         <!-- Кнопки (в один ряд) -->
                         <div id="hero-cta" class="hero-buttons">
                             <!-- Primary кнопка: "Пройти профілювання ->" (#8a00c2, білий текст) -->
-                            <button type="button" class="btn-primary-cta" onclick="alert('Розпочинаємо профілювання: аналіз ситуаційного вибору')">
+                            <a href="/question" class="btn-primary-cta">
                                 <span>Пройти профілювання</span>
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
                                     <line x1="5" y1="12" x2="19" y2="12"></line>
                                     <polyline points="12 5 19 12 12 19"></polyline>
                                 </svg>
-                            </button>
+                            </a>
 
                             <!-- Secondary кнопка: "Створити матрицю тесту ->" (світло-фіолетовий фон, #8a00c2) -->
-                            <button type="button" class="btn-secondary-cta" onclick="alert('Конструктор матриці: визначення вимірів та осей')">
+                            <a href="/create" class="btn-secondary-cta">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
                                     <line x1="6" y1="3" x2="6" y2="15"></line>
                                     <circle cx="18" cy="6" r="3"></circle>
@@ -151,12 +175,12 @@
                                     <line x1="5" y1="12" x2="19" y2="12"></line>
                                     <polyline points="12 5 19 12 12 19"></polyline>
                                 </svg>
-                            </button>
+                            </a>
                         </div>
 
                         <!-- Під кнопками: три маленькі пункти з іконками (з елементами фіолетового #8a00c2) -->
                         <div class="hero-features">
-
+                            
                             <!-- 1. Векторна оцінка ваг -->
                             <div class="feature-item">
                                 <div class="feature-icon-box">
@@ -207,14 +231,16 @@
                     <!-- Права колонка (3D ілюстрація) -->
                     <div class="hero-illustration-wrapper">
                         <div class="hero-glow-backdrop"></div>
-
+                        
                         <div class="illustration-card">
                             <div class="illustration-inner">
                                 <!-- 3D Render Image: Ноутбук зі спайдер-чартом (Емпатія, Логіка, Лідерство, Адаптивність), робот, голографічний вердикт -->
-                                <img src="hero-illustration.jpg"
-                                     asp-append-version="true"
-                                     alt="3D ілюстрація: ноутбук із радарною спайдер-діаграмою скілів, ситуаційною дилемою та роботом із голографічним AI-вердиктом"
-                                     class="illustration-img" />
+                                <img 
+                                    src="~/images/hero-illustration.jpg" 
+                                    asp-append-version="true"
+                                    alt="3D ілюстрація: ноутбук із радарною спайдер-діаграмою скілів, ситуаційною дилемою та роботом із голографічним AI-вердиктом" 
+                                    class="illustration-img"
+                                />
 
                                 <!-- Верхній плаваючий бейдж (AI-вердикт) -->
                                 <div class="floating-badge-top">
@@ -259,7 +285,7 @@
         <!-- 3. Section "Популярні напрямки аналізу" (Напрямки профілювання) -->
         <section id="directions" class="directions-section">
             <div class="container">
-
+                
                 <!-- Заголовок секції та посилання справа "Всі матриці ->" (#8a00c2) -->
                 <div class="section-header-row">
                     <div>
@@ -273,7 +299,7 @@
                         <h2 class="section-title">Популярні напрямки аналізу</h2>
                     </div>
 
-                    <a href="#all-matrices" class="view-all-link">
+                    <a href="/all" class="view-all-link">
                         <span>Всі матриці</span>
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -284,9 +310,9 @@
 
                 <!-- Сітка з 5 карток категорій в один ряд -->
                 <div class="directions-grid">
-
+                    
                     <!-- 1. Софт-скіли (Пастельний блакитний) -->
-                    <div class="direction-card card-soft-skills" onclick="alert('Напрямок: Софт-скіли')">
+                    <div class="direction-card card-soft-skills" onclick="window.location.href='/question'" title="Пройти профілювання з софт-скілів">
                         <div>
                             <div class="card-icon-box">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -307,7 +333,7 @@
                     </div>
 
                     <!-- 2. Лідерський потенціал (Пастельний бурштиновий) -->
-                    <div class="direction-card card-leadership" onclick="alert('Напрямок: Лідерський потенціал')">
+                    <div class="direction-card card-leadership" onclick="window.location.href='/question'" title="Пройти профілювання лідерського потенціалу">
                         <div>
                             <div class="card-icon-box">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -328,7 +354,7 @@
                     </div>
 
                     <!-- 3. Профорієнтація (Пастельний зелений) -->
-                    <div class="direction-card card-career" onclick="alert('Напрямок: Профорієнтація')">
+                    <div class="direction-card card-career" onclick="window.location.href='/question'" title="Пройти профорієнтаційне тестування">
                         <div>
                             <div class="card-icon-box">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -351,7 +377,7 @@
                     </div>
 
                     <!-- 4. Командна сумісність (Пастельний фіолетовий #8a00c2) -->
-                    <div class="direction-card card-team" onclick="alert('Напрямок: Командна сумісність')">
+                    <div class="direction-card card-team" onclick="window.location.href='/question'" title="Пройти тестування командної сумісності">
                         <div>
                             <div class="card-icon-box">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -375,7 +401,7 @@
                     </div>
 
                     <!-- 5. Стресостійкість (Пастельний рожевий) -->
-                    <div class="direction-card card-resilience" onclick="alert('Напрямок: Стресостійкість')">
+                    <div class="direction-card card-resilience" onclick="window.location.href='/question'" title="Пройти тестування стресостійкості">
                         <div>
                             <div class="card-icon-box">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -432,5 +458,40 @@
         </div>
     </footer>
 
+    <!-- Скрипт перевірки наявності активної чернетки та профілю -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                const saved = localStorage.getItem('smarttest_draft');
+                const banner = document.getElementById('quickDraftBanner');
+                const titleEl = document.getElementById('quickDraftTitle');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    if (banner && data && data.title) {
+                        if (titleEl) titleEl.textContent = data.title;
+                        banner.style.display = 'flex';
+                    }
+                } else {
+                    if (banner) banner.style.display = 'none';
+                }
+            } catch (e) {
+                console.log(e);
+            }
+
+            // Оновлення статусу кнопки входу в шапці
+            try {
+                const userRaw = localStorage.getItem('smarttest_user');
+                if (userRaw) {
+                    const user = JSON.parse(userRaw);
+                    const btn = document.querySelector('.btn-login span');
+                    if (btn && user.nickname) btn.textContent = '@@' + user.nickname;
+                }
+            } catch (e) {}
+        });
+    </script>
+
 </body>
 </html>
+
+
+

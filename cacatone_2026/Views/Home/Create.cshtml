@@ -1,0 +1,1128 @@
+@* 
+    SmartTest — Сторінка конструктора власної матриці тестування / дилем
+    Чистий Razor (.cshtml) + CSS
+*@
+@{
+    Layout = null;
+    ViewData["Title"] = "SmartTest — Конструктор багатовимірної матриці";
+}
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <meta name="description" content="Конструктор власної матриці тестування. Налаштування осей радарної діаграми, ситуаційних кейсів та векторних ваг." />
+
+    <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Стилі -->
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/style.css" />
+</head>
+<body style="background-color: #f8f9fa; min-height: 100vh; display: flex; flex-direction: column;">
+
+    <!-- Верхня панель конструктора -->
+    <header class="assessment-topbar">
+        <div class="container assessment-topbar-inner">
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <a href="/" class="assessment-back-btn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    <span>До каталогу</span>
+                </a>
+                <div style="width: 1px; height: 20px; background: #e2e8f0;"></div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span class="badge-pill-accent">КОНСТРУКТОР</span>
+                    <span style="font-size: 14px; font-weight: 800; color: #0f172a;">Створення авторської матриці</span>
+                </div>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <a href="/drafts" style="font-size: 12px; color: #8a00c2; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 6px; background: #fbf2ff; padding: 6px 14px; border-radius: 9999px; border: 1px solid #e4b6ff; transition: all 0.2s;" onmouseover="this.style.background='#f3e3fd'" onmouseout="this.style.background='#fbf2ff'">
+                    <span>💾 Мої чернетки (1)</span>
+                </a>
+                <a href="/question" class="btn-primary-cta" style="padding: 10px 22px; font-size: 13px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                    <span>Протестувати матрицю -></span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Основний контент конструктора -->
+    <main style="flex-grow: 1; padding: 40px 0 80px;">
+        <div class="container" style="max-width: 1000px;">
+            
+            <!-- Банер допомоги ШІ -->
+            <div style="background: linear-gradient(135deg, #ffffff 0%, #faf3fe 100%); border: 1.5px solid rgba(138, 0, 194, 0.2); border-radius: 20px; padding: 24px 28px; margin-bottom: 32px; box-shadow: 0 4px 20px rgba(138,0,194,0.06); display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <div style="width: 48px; height: 48px; border-radius: 14px; background: #8a00c2; color: #ffffff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 14px rgba(138,0,194,0.25);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 style="font-size: 18px; font-weight: 800; color: #0f172a; margin-bottom: 4px;">Швидка генерація структури через ШІ</h2>
+                        <p style="font-size: 13px; color: #475569; margin: 0;">Введіть будь-яку тему чи роль — ШІ Gemini автоматично розрахує осі радара та складе повні кейси й варіанти дій.</p>
+                    </div>
+                </div>
+                <button type="button" id="btnAiGenerate" class="btn-secondary-cta" style="padding: 10px 18px; font-size: 13px; cursor: pointer;" onclick="generateMatrixWithAi()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                    <span id="btnAiGenerateText">Автозаповнення ШІ</span>
+                </button>
+            </div>
+
+            <!-- Банер завантаженої чернетки -->
+            <div id="loadedDraftBanner" style="display: none; background: #faf5ff; border: 1.5px solid #d8b4fe; border-radius: 16px; padding: 14px 20px; margin-bottom: 24px; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 20px;">📋</span>
+                    <div>
+                        <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #8a00c2; letter-spacing: 0.5px; display: block;">АКТИВНА ЧЕРНЕТКА ВІДНОВЛЕНА З ПАМ'ЯТІ</span>
+                        <span style="font-size: 14px; font-weight: 700; color: #0f172a;" id="loadedDraftTitleText"></span>
+                    </div>
+                </div>
+                <button type="button" onclick="resetDraftAndClearForm()" style="background: #ffffff; border: 1px solid #fecdd3; color: #e11d48; padding: 7px 16px; border-radius: 9999px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#fff1f2'" onmouseout="this.style.background='#ffffff'">
+                    ✕ Очистити та створити нову
+                </button>
+            </div>
+
+            <!-- БЛОК 1: Базова інформація про тест -->
+            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 20px; padding: 32px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+                <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: #8a00c2; margin-bottom: 8px;">
+                    КРОК 1 • КОНТЕКСТ ПРОФІЛЮВАННЯ
+                </div>
+                <h3 style="font-size: 20px; font-weight: 800; color: #0f172a; margin-bottom: 20px;">
+                    Загальні параметри матриці
+                </h3>
+
+                <div style="display: flex; flex-direction: column; gap: 18px;">
+                    <div>
+                        <label style="display: block; font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 6px;">
+                            Назва авторської матриці (тема або посада)
+                        </label>
+                        <input type="text" id="matrixTitleInput" value="Оцінка лідерського потенціалу в IT-стартапах" style="width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 15px; color: #0f172a; font-family: inherit; outline: none; transition: all 0.2s;" onfocus="this.style.borderColor='#8a00c2'" onblur="this.style.borderColor='#e2e8f0'" placeholder="Наприклад: Кризовий менеджер у FinTech, Senior DevOps, тощо" />
+                    </div>
+
+                    <div>
+                        <label style="display: block; font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 6px;">
+                            Мета та опис кейсу
+                        </label>
+                        <textarea id="matrixDescInput" rows="2" style="width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 14px; color: #475569; font-family: inherit; outline: none; resize: vertical;" onfocus="this.style.borderColor='#8a00c2'" onblur="this.style.borderColor='#e2e8f0'" placeholder="Опишіть специфіку або мету тестування...">Визначення стилю прийняття рішень у стресових та невизначених ситуаціях, без оцінки ""правильно/неправильно"".</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- БЛОК 2: Налаштування осей радарної діаграми (Координатний простір) -->
+            <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 20px; padding: 32px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.03);">
+                <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: #8a00c2; margin-bottom: 8px;">
+                    КРОК 2 • БАГАТОВИМІРНІСТЬ (SPIDER CHART)
+                </div>
+                <h3 style="font-size: 20px; font-weight: 800; color: #0f172a; margin-bottom: 8px;">
+                    Осі радарної матриці
+                </h3>
+                <p style="font-size: 13px; color: #64748b; margin-bottom: 20px;">
+                    У цих координатах будуватиметься спайдер-діаграма респондента. Кожна відповідь додаватиме вагу до обраних осей.
+                </p>
+
+                <!-- Список осей -->
+                <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px;" id="axesList">
+                    <span class="axis-pill" style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; background: #fbf2ff; border: 1px solid #e4b6ff; color: #8a00c2; border-radius: 9999px; font-size: 13px; font-weight: 700;">
+                        <span>Емпатія & Довіра</span>
+                        <span style="cursor: pointer; opacity: 0.6;" onclick="removeAxis(this)">✕</span>
+                    </span>
+
+                    <span class="axis-pill" style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; background: #f0f5ff; border: 1px solid #dbeafe; color: #2563eb; border-radius: 9999px; font-size: 13px; font-weight: 700;">
+                        <span>Логіка & Архітектура</span>
+                        <span style="cursor: pointer; opacity: 0.6;" onclick="removeAxis(this)">✕</span>
+                    </span>
+
+                    <span class="axis-pill" style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; background: #fffaf0; border: 1px solid #fef3c7; color: #d97706; border-radius: 9999px; font-size: 13px; font-weight: 700;">
+                        <span>Кризове лідерство</span>
+                        <span style="cursor: pointer; opacity: 0.6;" onclick="removeAxis(this)">✕</span>
+                    </span>
+
+                    <span class="axis-pill" style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; background: #f0faf4; border: 1px solid #d1fae5; color: #059669; border-radius: 9999px; font-size: 13px; font-weight: 700;">
+                        <span>Адаптивність</span>
+                        <span style="cursor: pointer; opacity: 0.6;" onclick="removeAxis(this)">✕</span>
+                    </span>
+
+                    <span class="axis-pill" style="display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; background: #fff2f4; border: 1px solid #ffe4e6; color: #e11d48; border-radius: 9999px; font-size: 13px; font-weight: 700;">
+                        <span>Стресостійкість</span>
+                        <span style="cursor: pointer; opacity: 0.6;" onclick="removeAxis(this)">✕</span>
+                    </span>
+                </div>
+
+                <div style="display: flex; gap: 8px;">
+                    <input type="text" id="newAxisInput" placeholder="Назва нової осі (наприклад: Стратегічне бачення)" style="flex-grow: 1; padding: 10px 14px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 13px; outline: none;" />
+                    <button type="button" class="btn-secondary-cta" style="padding: 10px 16px; font-size: 13px;" onclick="addAxis()">
+                        + Додати вісь
+                    </button>
+                </div>
+            </div>
+
+            <!-- БЛОК 3: Контейнер для ситуаційних кейсів -->
+            <div id="casesContainer">
+                <!-- Початковий кейс 1 -->
+                <div class="case-card" data-category="Кризовий менеджмент" style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 20px; padding: 32px; margin-bottom: 24px; box-shadow: 0 4px 16px rgba(0,0,0,0.03); transition: all 0.3s ease;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+                        <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: #8a00c2;">
+                            КРОК 3 • КЕЙС <span class="case-idx">1</span> З <span class="case-total">1</span>
+                            <span style="margin-left: 8px; color: #64748b; text-transform: none; font-weight: 600;">[Кризовий менеджмент]</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="font-size: 12px; font-weight: 700; color: #059669; background: #ecfdf5; padding: 3px 10px; border-radius: 9999px;">
+                                ✓ Ваги збалансовані
+                            </span>
+                            <button type="button" class="btn-delete-case" onclick="removeCase(this)" style="background: #fff1f2; border: 1px solid #fecdd3; color: #e11d48; padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; display: none; align-items: center; gap: 4px;" title="Видалити цей кейс">
+                                ✕ Видалити кейс
+                            </button>
+                        </div>
+                    </div>
+
+                    <h3 style="font-size: 20px; font-weight: 800; color: #0f172a; margin-bottom: 16px;">
+                        Формулювання ситуаційної дилеми
+                    </h3>
+
+                    <div style="margin-bottom: 24px;">
+                        <input type="text" class="case-title-input" value="Колега припустився критичної помилки перед релізом. Ваші дії?" style="width: 100%; padding: 14px 16px; border: 1.5px solid #8a00c2; border-radius: 12px; font-size: 16px; font-weight: 700; color: #0f172a; outline: none; margin-bottom: 10px; box-sizing: border-box;" placeholder="Питання дилеми: що ви зробите?" />
+                        <textarea rows="2" class="case-context-input" style="width: 100%; padding: 10px 14px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 13px; color: #64748b; outline: none; box-sizing: border-box;" placeholder="Опис контексту та напруги кейсу...">До виходу в прод залишилося 3 години. Помилка конфігурації заблокувала платіжний шлюз...</textarea>
+                    </div>
+
+                    <div style="font-size: 14px; font-weight: 800; color: #0f172a; margin-bottom: 12px;">
+                        Стратегії дій та їхній вплив на осі:
+                    </div>
+
+                    <!-- Картки стратегій із вагами -->
+                    <div class="options-container" style="display: flex; flex-direction: column;">
+                        <!-- Варіант A -->
+                        <div class="option-card-row" data-letter="A" style="border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px; background: #fafafa; margin-bottom: 12px; transition: all 0.2s;">
+                            <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
+                                <span class="option-letter-badge" style="width: 28px; height: 28px; border-radius: 9999px; background: #8a00c2; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; flex-shrink: 0;">A</span>
+                                <input type="text" class="option-text-input" value="Спокійно розібрати інцидент в 1-on-1 та разом написати фікс" placeholder="Опис стратегії або дії для варіанту A..." style="flex-grow: 1; padding: 9px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 13.5px; font-weight: 600; color: #0f172a; outline: none; background: #ffffff;" />
+                                <button type="button" class="btn-remove-option" onclick="removeOption(this)" title="Видалити варіант A" style="background: #fff1f2; border: 1px solid #fecdd3; color: #e11d48; width: 32px; height: 32px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">✕</button>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px; padding-left: 38px; flex-wrap: wrap;">
+                                <span style="font-size: 12px; font-weight: 700; color: #64748b; white-space: nowrap;">⚡ Векторний внесок:</span>
+                                <div class="vectors-list" style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+                                    <div class="vector-item" style="display: inline-flex; align-items: center; gap: 6px; background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 4px 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+                                        <select class="vector-axis-select" style="font-size: 12px; font-weight: 700; color: #0f172a; border: none; background: transparent; outline: none; cursor: pointer; max-width: 170px;">
+                                            <option value="Емпатія & Довіра" selected>Емпатія & Довіра</option>
+                                            <option value="Логіка & Архітектура">Логіка & Архітектура</option>
+                                            <option value="Кризове лідерство">Кризове лідерство</option>
+                                            <option value="Адаптивність">Адаптивність</option>
+                                            <option value="Стресостійкість">Стресостійкість</option>
+                                        </select>
+                                        <span style="font-size: 12px; font-weight: 800; color: #8a00c2;">+</span>
+                                        <input type="number" class="vector-points-input" min="5" max="100" step="1" value="45" style="width: 44px; padding: 2px 4px; font-size: 12px; font-weight: 800; color: #8a00c2; border: 1px solid #e9d5ff; border-radius: 6px; text-align: center; outline: none; background: #faf5ff;" title="Бали впливу (5-100)" />
+                                        <span style="font-size: 11px; color: #94a3b8; font-weight: 600;">балів</span>
+                                        <button type="button" class="btn-remove-vector" onclick="removeVector(this)" title="Видалити вісь" style="border: none; background: transparent; color: #94a3b8; font-size: 13px; font-weight: 700; cursor: pointer; padding: 0 2px; line-height: 1;">✕</button>
+                                    </div>
+                                    <div class="vector-item" style="display: inline-flex; align-items: center; gap: 6px; background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 4px 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+                                        <select class="vector-axis-select" style="font-size: 12px; font-weight: 700; color: #0f172a; border: none; background: transparent; outline: none; cursor: pointer; max-width: 170px;">
+                                            <option value="Емпатія & Довіра">Емпатія & Довіра</option>
+                                            <option value="Логіка & Архітектура">Логіка & Архітектура</option>
+                                            <option value="Кризове лідерство">Кризове лідерство</option>
+                                            <option value="Адаптивність">Адаптивність</option>
+                                            <option value="Стресостійкість" selected>Стресостійкість</option>
+                                        </select>
+                                        <span style="font-size: 12px; font-weight: 800; color: #8a00c2;">+</span>
+                                        <input type="number" class="vector-points-input" min="5" max="100" step="1" value="38" style="width: 44px; padding: 2px 4px; font-size: 12px; font-weight: 800; color: #8a00c2; border: 1px solid #e9d5ff; border-radius: 6px; text-align: center; outline: none; background: #faf5ff;" title="Бали впливу (5-100)" />
+                                        <span style="font-size: 11px; color: #94a3b8; font-weight: 600;">балів</span>
+                                        <button type="button" class="btn-remove-vector" onclick="removeVector(this)" title="Видалити вісь" style="border: none; background: transparent; color: #94a3b8; font-size: 13px; font-weight: 700; cursor: pointer; padding: 0 2px; line-height: 1;">✕</button>
+                                    </div>
+                                    <button type="button" class="btn-add-vector" onclick="addVectorToOption(this)" title="Додати ще одну вісь впливу" style="border: 1.5px dashed #cbd5e1; background: #f8fafc; color: #64748b; font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: 8px; cursor: pointer;">+ Вектор</button>
+                                </div>
+                                <div style="margin-left: auto; display: inline-flex; align-items: center; gap: 6px; background: #fbf2ff; border: 1.5px solid #e4b6ff; border-radius: 8px; padding: 4px 10px;">
+                                    <span style="font-size: 11px; font-weight: 800; color: #8a00c2; white-space: nowrap;">🎯 Мікро-архетип:</span>
+                                    <input type="text" class="option-archetype-input" value="Емпатичний Ментор" placeholder="Назва архетипу..." style="font-size: 12px; font-weight: 700; color: #8a00c2; border: none; background: transparent; outline: none; width: 140px;" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Варіант B -->
+                        <div class="option-card-row" data-letter="B" style="border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px; background: #fafafa; margin-bottom: 12px; transition: all 0.2s;">
+                            <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
+                                <span class="option-letter-badge" style="width: 28px; height: 28px; border-radius: 9999px; background: #8a00c2; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; flex-shrink: 0;">B</span>
+                                <input type="text" class="option-text-input" value="Організувати швидкий War Room для команди без пошуку винних" placeholder="Опис стратегії або дії для варіанту B..." style="flex-grow: 1; padding: 9px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 13.5px; font-weight: 600; color: #0f172a; outline: none; background: #ffffff;" />
+                                <button type="button" class="btn-remove-option" onclick="removeOption(this)" title="Видалити варіант B" style="background: #fff1f2; border: 1px solid #fecdd3; color: #e11d48; width: 32px; height: 32px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">✕</button>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px; padding-left: 38px; flex-wrap: wrap;">
+                                <span style="font-size: 12px; font-weight: 700; color: #64748b; white-space: nowrap;">⚡ Векторний внесок:</span>
+                                <div class="vectors-list" style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+                                    <div class="vector-item" style="display: inline-flex; align-items: center; gap: 6px; background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 4px 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+                                        <select class="vector-axis-select" style="font-size: 12px; font-weight: 700; color: #0f172a; border: none; background: transparent; outline: none; cursor: pointer; max-width: 170px;">
+                                            <option value="Емпатія & Довіра">Емпатія & Довіра</option>
+                                            <option value="Логіка & Архітектура">Логіка & Архітектура</option>
+                                            <option value="Кризове лідерство" selected>Кризове лідерство</option>
+                                            <option value="Адаптивність">Адаптивність</option>
+                                            <option value="Стресостійкість">Стресостійкість</option>
+                                        </select>
+                                        <span style="font-size: 12px; font-weight: 800; color: #8a00c2;">+</span>
+                                        <input type="number" class="vector-points-input" min="5" max="100" step="1" value="50" style="width: 44px; padding: 2px 4px; font-size: 12px; font-weight: 800; color: #8a00c2; border: 1px solid #e9d5ff; border-radius: 6px; text-align: center; outline: none; background: #faf5ff;" title="Бали впливу (5-100)" />
+                                        <span style="font-size: 11px; color: #94a3b8; font-weight: 600;">балів</span>
+                                        <button type="button" class="btn-remove-vector" onclick="removeVector(this)" title="Видалити вісь" style="border: none; background: transparent; color: #94a3b8; font-size: 13px; font-weight: 700; cursor: pointer; padding: 0 2px; line-height: 1;">✕</button>
+                                    </div>
+                                    <div class="vector-item" style="display: inline-flex; align-items: center; gap: 6px; background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 4px 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+                                        <select class="vector-axis-select" style="font-size: 12px; font-weight: 700; color: #0f172a; border: none; background: transparent; outline: none; cursor: pointer; max-width: 170px;">
+                                            <option value="Емпатія & Довіра">Емпатія & Довіра</option>
+                                            <option value="Логіка & Архітектура" selected>Логіка & Архітектура</option>
+                                            <option value="Кризове лідерство">Кризове лідерство</option>
+                                            <option value="Адаптивність">Адаптивність</option>
+                                            <option value="Стресостійкість">Стресостійкість</option>
+                                        </select>
+                                        <span style="font-size: 12px; font-weight: 800; color: #8a00c2;">+</span>
+                                        <input type="number" class="vector-points-input" min="5" max="100" step="1" value="42" style="width: 44px; padding: 2px 4px; font-size: 12px; font-weight: 800; color: #8a00c2; border: 1px solid #e9d5ff; border-radius: 6px; text-align: center; outline: none; background: #faf5ff;" title="Бали впливу (5-100)" />
+                                        <span style="font-size: 11px; color: #94a3b8; font-weight: 600;">балів</span>
+                                        <button type="button" class="btn-remove-vector" onclick="removeVector(this)" title="Видалити вісь" style="border: none; background: transparent; color: #94a3b8; font-size: 13px; font-weight: 700; cursor: pointer; padding: 0 2px; line-height: 1;">✕</button>
+                                    </div>
+                                    <button type="button" class="btn-add-vector" onclick="addVectorToOption(this)" title="Додати ще одну вісь впливу" style="border: 1.5px dashed #cbd5e1; background: #f8fafc; color: #64748b; font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: 8px; cursor: pointer;">+ Вектор</button>
+                                </div>
+                                <div style="margin-left: auto; display: inline-flex; align-items: center; gap: 6px; background: #fbf2ff; border: 1.5px solid #e4b6ff; border-radius: 8px; padding: 4px 10px;">
+                                    <span style="font-size: 11px; font-weight: 800; color: #8a00c2; white-space: nowrap;">🎯 Мікро-архетип:</span>
+                                    <input type="text" class="option-archetype-input" value="Кризовий Лідер" placeholder="Назва архетипу..." style="font-size: 12px; font-weight: 700; color: #8a00c2; border: none; background: transparent; outline: none; width: 140px;" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Варіант C -->
+                        <div class="option-card-row" data-letter="C" style="border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px; background: #fafafa; margin-bottom: 12px; transition: all 0.2s;">
+                            <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
+                                <span class="option-letter-badge" style="width: 28px; height: 28px; border-radius: 9999px; background: #8a00c2; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; flex-shrink: 0;">C</span>
+                                <input type="text" class="option-text-input" value="Терміново відкотити версію до стабільної та розгорнути ізольований хотфікс" placeholder="Опис стратегії або дії для варіанту C..." style="flex-grow: 1; padding: 9px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 13.5px; font-weight: 600; color: #0f172a; outline: none; background: #ffffff;" />
+                                <button type="button" class="btn-remove-option" onclick="removeOption(this)" title="Видалити варіант C" style="background: #fff1f2; border: 1px solid #fecdd3; color: #e11d48; width: 32px; height: 32px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">✕</button>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px; padding-left: 38px; flex-wrap: wrap;">
+                                <span style="font-size: 12px; font-weight: 700; color: #64748b; white-space: nowrap;">⚡ Векторний внесок:</span>
+                                <div class="vectors-list" style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+                                    <div class="vector-item" style="display: inline-flex; align-items: center; gap: 6px; background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 4px 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+                                        <select class="vector-axis-select" style="font-size: 12px; font-weight: 700; color: #0f172a; border: none; background: transparent; outline: none; cursor: pointer; max-width: 170px;">
+                                            <option value="Емпатія & Довіра">Емпатія & Довіра</option>
+                                            <option value="Логіка & Архітектура" selected>Логіка & Архітектура</option>
+                                            <option value="Кризове лідерство">Кризове лідерство</option>
+                                            <option value="Адаптивність">Адаптивність</option>
+                                            <option value="Стресостійкість">Стресостійкість</option>
+                                        </select>
+                                        <span style="font-size: 12px; font-weight: 800; color: #8a00c2;">+</span>
+                                        <input type="number" class="vector-points-input" min="5" max="100" step="1" value="48" style="width: 44px; padding: 2px 4px; font-size: 12px; font-weight: 800; color: #8a00c2; border: 1px solid #e9d5ff; border-radius: 6px; text-align: center; outline: none; background: #faf5ff;" title="Бали впливу (5-100)" />
+                                        <span style="font-size: 11px; color: #94a3b8; font-weight: 600;">балів</span>
+                                        <button type="button" class="btn-remove-vector" onclick="removeVector(this)" title="Видалити вісь" style="border: none; background: transparent; color: #94a3b8; font-size: 13px; font-weight: 700; cursor: pointer; padding: 0 2px; line-height: 1;">✕</button>
+                                    </div>
+                                    <div class="vector-item" style="display: inline-flex; align-items: center; gap: 6px; background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 4px 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+                                        <select class="vector-axis-select" style="font-size: 12px; font-weight: 700; color: #0f172a; border: none; background: transparent; outline: none; cursor: pointer; max-width: 170px;">
+                                            <option value="Емпатія & Довіра">Емпатія & Довіра</option>
+                                            <option value="Логіка & Архітектура">Логіка & Архітектура</option>
+                                            <option value="Кризове лідерство">Кризове лідерство</option>
+                                            <option value="Адаптивність">Адаптивність</option>
+                                            <option value="Стресостійкість" selected>Стресостійкість</option>
+                                        </select>
+                                        <span style="font-size: 12px; font-weight: 800; color: #8a00c2;">+</span>
+                                        <input type="number" class="vector-points-input" min="5" max="100" step="1" value="40" style="width: 44px; padding: 2px 4px; font-size: 12px; font-weight: 800; color: #8a00c2; border: 1px solid #e9d5ff; border-radius: 6px; text-align: center; outline: none; background: #faf5ff;" title="Бали впливу (5-100)" />
+                                        <span style="font-size: 11px; color: #94a3b8; font-weight: 600;">балів</span>
+                                        <button type="button" class="btn-remove-vector" onclick="removeVector(this)" title="Видалити вісь" style="border: none; background: transparent; color: #94a3b8; font-size: 13px; font-weight: 700; cursor: pointer; padding: 0 2px; line-height: 1;">✕</button>
+                                    </div>
+                                    <button type="button" class="btn-add-vector" onclick="addVectorToOption(this)" title="Додати ще одну вісь впливу" style="border: 1.5px dashed #cbd5e1; background: #f8fafc; color: #64748b; font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: 8px; cursor: pointer;">+ Вектор</button>
+                                </div>
+                                <div style="margin-left: auto; display: inline-flex; align-items: center; gap: 6px; background: #fbf2ff; border: 1.5px solid #e4b6ff; border-radius: 8px; padding: 4px 10px;">
+                                    <span style="font-size: 11px; font-weight: 800; color: #8a00c2; white-space: nowrap;">🎯 Мікро-архетип:</span>
+                                    <input type="text" class="option-archetype-input" value="Системний Архітектор" placeholder="Назва архетипу..." style="font-size: 12px; font-weight: 700; color: #8a00c2; border: none; background: transparent; outline: none; width: 140px;" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Варіант D -->
+                        <div class="option-card-row" data-letter="D" style="border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px; background: #fafafa; margin-bottom: 12px; transition: all 0.2s;">
+                            <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
+                                <span class="option-letter-badge" style="width: 28px; height: 28px; border-radius: 9999px; background: #8a00c2; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; flex-shrink: 0;">D</span>
+                                <input type="text" class="option-text-input" value="Переключити трафік на аварійну заглушку й паралельно провести командну ретроспективу" placeholder="Опис стратегії або дії для варіанту D..." style="flex-grow: 1; padding: 9px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 13.5px; font-weight: 600; color: #0f172a; outline: none; background: #ffffff;" />
+                                <button type="button" class="btn-remove-option" onclick="removeOption(this)" title="Видалити варіант D" style="background: #fff1f2; border: 1px solid #fecdd3; color: #e11d48; width: 32px; height: 32px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">✕</button>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 10px; padding-left: 38px; flex-wrap: wrap;">
+                                <span style="font-size: 12px; font-weight: 700; color: #64748b; white-space: nowrap;">⚡ Векторний внесок:</span>
+                                <div class="vectors-list" style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+                                    <div class="vector-item" style="display: inline-flex; align-items: center; gap: 6px; background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 4px 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+                                        <select class="vector-axis-select" style="font-size: 12px; font-weight: 700; color: #0f172a; border: none; background: transparent; outline: none; cursor: pointer; max-width: 170px;">
+                                            <option value="Емпатія & Довіра">Емпатія & Довіра</option>
+                                            <option value="Логіка & Архітектура">Логіка & Архітектура</option>
+                                            <option value="Кризове лідерство">Кризове лідерство</option>
+                                            <option value="Адаптивність" selected>Адаптивність</option>
+                                            <option value="Стресостійкість">Стресостійкість</option>
+                                        </select>
+                                        <span style="font-size: 12px; font-weight: 800; color: #8a00c2;">+</span>
+                                        <input type="number" class="vector-points-input" min="5" max="100" step="1" value="46" style="width: 44px; padding: 2px 4px; font-size: 12px; font-weight: 800; color: #8a00c2; border: 1px solid #e9d5ff; border-radius: 6px; text-align: center; outline: none; background: #faf5ff;" title="Бали впливу (5-100)" />
+                                        <span style="font-size: 11px; color: #94a3b8; font-weight: 600;">балів</span>
+                                        <button type="button" class="btn-remove-vector" onclick="removeVector(this)" title="Видалити вісь" style="border: none; background: transparent; color: #94a3b8; font-size: 13px; font-weight: 700; cursor: pointer; padding: 0 2px; line-height: 1;">✕</button>
+                                    </div>
+                                    <div class="vector-item" style="display: inline-flex; align-items: center; gap: 6px; background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 4px 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+                                        <select class="vector-axis-select" style="font-size: 12px; font-weight: 700; color: #0f172a; border: none; background: transparent; outline: none; cursor: pointer; max-width: 170px;">
+                                            <option value="Емпатія & Довіра" selected>Емпатія & Довіра</option>
+                                            <option value="Логіка & Архітектура">Логіка & Архітектура</option>
+                                            <option value="Кризове лідерство">Кризове лідерство</option>
+                                            <option value="Адаптивність">Адаптивність</option>
+                                            <option value="Стресостійкість">Стресостійкість</option>
+                                        </select>
+                                        <span style="font-size: 12px; font-weight: 800; color: #8a00c2;">+</span>
+                                        <input type="number" class="vector-points-input" min="5" max="100" step="1" value="42" style="width: 44px; padding: 2px 4px; font-size: 12px; font-weight: 800; color: #8a00c2; border: 1px solid #e9d5ff; border-radius: 6px; text-align: center; outline: none; background: #faf5ff;" title="Бали впливу (5-100)" />
+                                        <span style="font-size: 11px; color: #94a3b8; font-weight: 600;">балів</span>
+                                        <button type="button" class="btn-remove-vector" onclick="removeVector(this)" title="Видалити вісь" style="border: none; background: transparent; color: #94a3b8; font-size: 13px; font-weight: 700; cursor: pointer; padding: 0 2px; line-height: 1;">✕</button>
+                                    </div>
+                                    <button type="button" class="btn-add-vector" onclick="addVectorToOption(this)" title="Додати ще одну вісь впливу" style="border: 1.5px dashed #cbd5e1; background: #f8fafc; color: #64748b; font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: 8px; cursor: pointer;">+ Вектор</button>
+                                </div>
+                                <div style="margin-left: auto; display: inline-flex; align-items: center; gap: 6px; background: #fbf2ff; border: 1.5px solid #e4b6ff; border-radius: 8px; padding: 4px 10px;">
+                                    <span style="font-size: 11px; font-weight: 800; color: #8a00c2; white-space: nowrap;">🎯 Мікро-архетип:</span>
+                                    <input type="text" class="option-archetype-input" value="Адаптивний Оптимізатор" placeholder="Назва архетипу..." style="font-size: 12px; font-weight: 700; color: #8a00c2; border: none; background: transparent; outline: none; width: 140px;" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                        <button type="button" class="btn-add-option" onclick="addOptionToCase(this)" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: #f8fafc; border: 1.5px dashed #8a00c2; color: #8a00c2; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s;">
+                            <span>+ Додати варіант відповіді</span>
+                        </button>
+                        <div style="font-size: 12px; color: #94a3b8; font-weight: 600;">
+                            Варіантів: <span class="options-count-badge">4</span> (від 2 до 6)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Блок додавання нового кейсу -->
+            <div style="background: #faf5ff; border: 2px dashed #d8b4fe; border-radius: 20px; padding: 24px 28px; margin-bottom: 32px; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <div style="width: 44px; height: 44px; border-radius: 12px; background: #8a00c2; color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 800; flex-shrink: 0; box-shadow: 0 4px 12px rgba(138,0,194,0.25);">
+                        +
+                    </div>
+                    <div>
+                        <div style="font-size: 16px; font-weight: 800; color: #3b0764; margin-bottom: 2px;">Бажаєте додати ще одну дилему?</div>
+                        <div style="font-size: 13px; color: #7e22ce;">ШІ згенерує унікальний ситуаційний кейс або ви можете створити власний.</div>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                    <button type="button" class="btn-primary-cta" onclick="addAiCase()" style="padding: 12px 20px; font-size: 14px; cursor: pointer; white-space: nowrap;">
+                        <span>⚡ + Згенерувати кейс через ШІ</span>
+                    </button>
+                    <button type="button" class="btn-secondary-cta" onclick="addNewManualCase()" style="padding: 12px 18px; font-size: 14px; cursor: pointer; white-space: nowrap;">
+                        <span>+ Пустий кейс</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- БЛОК 4: Фінальна публікація -->
+            <div class="verdict-action-strip" style="background: #ffffff; border: 2px solid #8a00c2; box-shadow: 0 10px 30px rgba(138,0,194,0.12);">
+                <div class="badge-pill-accent" style="margin-bottom: 4px;">ФІНАЛЬНИЙ ЕТАП</div>
+                <h3 class="strip-title" style="margin: 0;">Матриця готова до генерації AI-посилань</h3>
+                <p class="strip-desc" style="margin: 0;">
+                    Після збереження ви зможете одразу протестувати власну матрицю наживо з інтерактивним AI-сенсором та отримати персональний вердикт.
+                </p>
+                <div class="strip-buttons" style="margin-top: 8px;">
+                    <button type="button" onclick="publishAndOpenTest()" class="btn-primary-cta" style="border: none; cursor: pointer; font-size: 14px; padding: 12px 26px;">
+                        <span>Опублікувати та відкрити тест -></span>
+                    </button>
+                    <button type="button" onclick="saveDraft()" class="btn-secondary-cta" style="cursor: pointer;">
+                        <span>Зберегти в чернетки</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- AI Loading Modal для конструктора -->
+    <div id="aiConstructorOverlay" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.92); z-index: 99999; backdrop-filter: blur(8px); align-items: center; justify-content: center; flex-direction: column; color: white; text-align: center; padding: 20px;">
+        <div style="width: 76px; height: 76px; border: 5px solid rgba(216, 180, 254, 0.2); border-top-color: #8a00c2; border-radius: 50%; animation: ctorSpin 0.9s linear infinite; margin-bottom: 24px; box-shadow: 0 0 35px rgba(138, 0, 194, 0.5);"></div>
+        <h2 id="aiOverlayTitle" style="font-size: 24px; font-weight: 800; margin-bottom: 8px; color: #ffffff;">Штучний інтелект Gemini генерує матрицю...</h2>
+        <p id="aiOverlayDesc" style="color: #cbd5e1; font-size: 15px; max-width: 480px; line-height: 1.5;">Розраховуємо ключові вектори компетенцій, балансуємо спайдер-діаграму та створюємо гострі ситуаційні кейси без упереджень.</p>
+        <span style="display: inline-block; margin-top: 18px; padding: 6px 16px; background: rgba(138, 0, 194, 0.25); border: 1px solid rgba(216, 180, 254, 0.4); border-radius: 9999px; font-size: 12px; font-weight: 700; color: #e9d5ff; letter-spacing: 0.5px;">⚡ LIVE AI GENERATION</span>
+    </div>
+    <style>
+        @@keyframes ctorSpin { 100% { transform: rotate(360deg); } }
+    </style>
+
+    <!-- Скрипти конструктора -->
+    <script>
+        const axisColorPalettes = [
+            { bg: '#fbf2ff', border: '#e4b6ff', color: '#8a00c2' },
+            { bg: '#f0f5ff', border: '#dbeafe', color: '#2563eb' },
+            { bg: '#fffaf0', border: '#fef3c7', color: '#d97706' },
+            { bg: '#f0faf4', border: '#d1fae5', color: '#059669' },
+            { bg: '#fff2f4', border: '#ffe4e6', color: '#e11d48' },
+            { bg: '#f5f3ff', border: '#ddd6fe', color: '#7c3aed' },
+            { bg: '#ecfeff', border: '#a5f3fc', color: '#0891b2' }
+        ];
+
+        function showAiOverlay(title, desc) {
+            const overlay = document.getElementById('aiConstructorOverlay');
+            if (title) document.getElementById('aiOverlayTitle').innerText = title;
+            if (desc) document.getElementById('aiOverlayDesc').innerText = desc;
+            if (overlay) overlay.style.display = 'flex';
+        }
+
+        function hideAiOverlay() {
+            const overlay = document.getElementById('aiConstructorOverlay');
+            if (overlay) overlay.style.display = 'none';
+        }
+
+        function getAxesList() {
+            const pills = document.querySelectorAll('#axesList .axis-pill span:first-child');
+            const result = [];
+            pills.forEach(p => {
+                const text = p.textContent.trim();
+                if (text) result.push(text);
+            });
+            return result.length > 0 ? result : ['Кризове лідерство', 'Логіка & Архітектура', 'Емпатія & Довіра', 'Адаптивність', 'Стресостійкість'];
+        }
+
+        function removeAxis(el) {
+            const pills = document.querySelectorAll('#axesList .axis-pill');
+            if (pills.length <= 2) {
+                alert("Матриця повинна містити щонайменше 2 осі!");
+                return;
+            }
+            el.parentElement.remove();
+            syncAllVectorSelects();
+        }
+
+        function renderAxes(axes) {
+            const list = document.getElementById('axesList');
+            list.innerHTML = '';
+            axes.forEach((axisName, idx) => {
+                const pal = axisColorPalettes[idx % axisColorPalettes.length];
+                const span = document.createElement('span');
+                span.className = 'axis-pill';
+                span.style.cssText = `display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; background: ${pal.bg}; border: 1px solid ${pal.border}; color: ${pal.color}; border-radius: 9999px; font-size: 13px; font-weight: 700;`;
+                span.innerHTML = `<span>${axisName}</span><span style="cursor: pointer; opacity: 0.6;" onclick="removeAxis(this)">✕</span>`;
+                list.appendChild(span);
+            });
+            syncAllVectorSelects();
+        }
+
+        function addAxis() {
+            const input = document.getElementById('newAxisInput');
+            const val = input.value.trim();
+            if (!val) return;
+
+            const idx = document.querySelectorAll('#axesList .axis-pill').length;
+            const pal = axisColorPalettes[idx % axisColorPalettes.length];
+            const span = document.createElement('span');
+            span.className = 'axis-pill';
+            span.style.cssText = `display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; background: ${pal.bg}; border: 1px solid ${pal.border}; color: ${pal.color}; border-radius: 9999px; font-size: 13px; font-weight: 700;`;
+            span.innerHTML = `<span>${val}</span><span style="cursor: pointer; opacity: 0.6;" onclick="removeAxis(this)">✕</span>`;
+
+            document.getElementById('axesList').appendChild(span);
+            input.value = '';
+            syncAllVectorSelects();
+        }
+
+        function syncAllVectorSelects() {
+            const currentAxes = getAxesList();
+            document.querySelectorAll('.vector-axis-select').forEach(sel => {
+                const currentVal = sel.value;
+                sel.innerHTML = '';
+                currentAxes.forEach(ax => {
+                    const opt = document.createElement('option');
+                    opt.value = ax;
+                    opt.textContent = ax;
+                    if (ax === currentVal) opt.selected = true;
+                    sel.appendChild(opt);
+                });
+                if (!sel.value && currentAxes.length > 0) {
+                    sel.value = currentAxes[0];
+                }
+            });
+        }
+
+        function updateCaseIndices() {
+            const cases = document.querySelectorAll('#casesContainer .case-card');
+            const total = cases.length;
+            cases.forEach((card, i) => {
+                const num = i + 1;
+                const idxEl = card.querySelector('.case-idx');
+                const totalEl = card.querySelector('.case-total');
+                if (idxEl) idxEl.textContent = num;
+                if (totalEl) totalEl.textContent = total;
+
+                const deleteBtn = card.querySelector('.btn-delete-case');
+                if (deleteBtn) {
+                    deleteBtn.style.display = total > 1 ? 'inline-flex' : 'none';
+                }
+            });
+        }
+
+        function removeCase(btn) {
+            const card = btn.closest('.case-card');
+            if (!card) return;
+            const cases = document.querySelectorAll('#casesContainer .case-card');
+            if (cases.length <= 1) {
+                alert("Матриця повинна містити щонайменше 1 кейс!");
+                return;
+            }
+            card.remove();
+            updateCaseIndices();
+        }
+
+        function buildVectorItemHtml(axisName, points, axesList) {
+            const validAxes = (axesList && axesList.length > 0) ? axesList : getAxesList();
+            const currentAxis = axisName || validAxes[0] || 'Стратегія';
+            const currentPoints = (points !== undefined && points !== null && !isNaN(points)) ? points : 45;
+
+            let optionsHtml = '';
+            validAxes.forEach(ax => {
+                const isSel = (ax === currentAxis) ? 'selected' : '';
+                optionsHtml += `<option value="${ax.replace(/"/g, '&quot;')}" ${isSel}>${ax}</option>`;
+            });
+
+            return `
+                <div class="vector-item" style="display: inline-flex; align-items: center; gap: 6px; background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 4px 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+                    <select class="vector-axis-select" style="font-size: 12px; font-weight: 700; color: #0f172a; border: none; background: transparent; outline: none; cursor: pointer; max-width: 170px;">
+                        ${optionsHtml}
+                    </select>
+                    <span style="font-size: 12px; font-weight: 800; color: #8a00c2;">+</span>
+                    <input type="number" class="vector-points-input" min="5" max="100" step="1" value="${currentPoints}" style="width: 44px; padding: 2px 4px; font-size: 12px; font-weight: 800; color: #8a00c2; border: 1px solid #e9d5ff; border-radius: 6px; text-align: center; outline: none; background: #faf5ff;" title="Бали впливу (5-100)" />
+                    <span style="font-size: 11px; color: #94a3b8; font-weight: 600;">балів</span>
+                    <button type="button" class="btn-remove-vector" onclick="removeVector(this)" title="Видалити вісь" style="border: none; background: transparent; color: #94a3b8; font-size: 13px; font-weight: 700; cursor: pointer; padding: 0 2px; line-height: 1;">✕</button>
+                </div>
+            `;
+        }
+
+        function addVectorToOption(btn) {
+            const list = btn.closest('.vectors-list');
+            if (!list) return;
+            const axes = getAxesList();
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = buildVectorItemHtml(axes[0] || 'Стратегія', 40, axes);
+            const newEl = tempDiv.firstElementChild;
+            list.insertBefore(newEl, btn);
+        }
+
+        function removeVector(btn) {
+            const item = btn.closest('.vector-item');
+            const list = btn.closest('.vectors-list');
+            if (!item || !list) return;
+            const allVectors = list.querySelectorAll('.vector-item');
+            if (allVectors.length <= 1) {
+                alert('Варіант відповіді повинен впливати щонайменше на 1 вісь!');
+                return;
+            }
+            item.remove();
+        }
+
+        function buildOptionRowHtml(opt, index, axesList) {
+            const letter = opt.letter || String.fromCharCode(65 + index);
+            const textVal = (opt.text || '').replace(/"/g, '&quot;');
+            const archetypeVal = (opt.archetype || `Архетип ${letter}`).replace(/"/g, '&quot;');
+            const currentAxes = (axesList && axesList.length > 0) ? axesList : getAxesList();
+
+            let vectors = opt.vectors;
+            if (!Array.isArray(vectors) || vectors.length === 0) {
+                vectors = [
+                    { axis: currentAxes[index % currentAxes.length] || 'Кризове лідерство', points: 45 },
+                    { axis: currentAxes[(index + 1) % currentAxes.length] || 'Логіка & Архітектура', points: 38 }
+                ];
+            }
+
+            let vectorsHtml = '';
+            vectors.forEach(v => {
+                vectorsHtml += buildVectorItemHtml(v.axis, v.points, currentAxes);
+            });
+
+            const statsJson = JSON.stringify(opt.stats || {}).replace(/'/g, '&#39;');
+
+            return `
+                <div class="option-card-row" data-letter="${letter}" data-stats='${statsJson}' style="border: 1px solid #e2e8f0; border-radius: 14px; padding: 16px; background: #fafafa; margin-bottom: 12px; transition: all 0.2s;">
+                    <!-- Верхній рядок: літера [A], текстове поле стратегії, кнопка видалення ✕ -->
+                    <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px;">
+                        <span class="option-letter-badge" style="width: 28px; height: 28px; border-radius: 9999px; background: #8a00c2; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px; flex-shrink: 0;">${letter}</span>
+                        <input type="text" class="option-text-input" value="${textVal}" placeholder="Опис стратегії або дії для варіанту ${letter}..." style="flex-grow: 1; padding: 9px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 13.5px; font-weight: 600; color: #0f172a; outline: none; background: #ffffff;" />
+                        <button type="button" class="btn-remove-option" onclick="removeOption(this)" title="Видалити варіант ${letter}" style="background: #fff1f2; border: 1px solid #fecdd3; color: #e11d48; width: 32px; height: 32px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">✕</button>
+                    </div>
+
+                    <!-- Нижній блок: Векторний внесок та Архетип -->
+                    <div style="display: flex; align-items: center; gap: 10px; padding-left: 38px; flex-wrap: wrap;">
+                        <span style="font-size: 12px; font-weight: 700; color: #64748b; white-space: nowrap;">⚡ Векторний внесок:</span>
+                        <div class="vectors-list" style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+                            ${vectorsHtml}
+                            <button type="button" class="btn-add-vector" onclick="addVectorToOption(this)" title="Додати ще одну вісь впливу" style="border: 1.5px dashed #cbd5e1; background: #f8fafc; color: #64748b; font-size: 11.5px; font-weight: 700; padding: 4px 10px; border-radius: 8px; cursor: pointer;">+ Вектор</button>
+                        </div>
+
+                        <div style="margin-left: auto; display: inline-flex; align-items: center; gap: 6px; background: #fbf2ff; border: 1.5px solid #e4b6ff; border-radius: 8px; padding: 4px 10px;">
+                            <span style="font-size: 11px; font-weight: 800; color: #8a00c2; white-space: nowrap;">🎯 Мікро-архетип:</span>
+                            <input type="text" class="option-archetype-input" value="${archetypeVal}" placeholder="Мікро-архетип..." style="font-size: 12px; font-weight: 700; color: #8a00c2; border: none; background: transparent; outline: none; width: 140px;" />
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function addOptionToCase(btn) {
+            const card = btn.closest('.case-card');
+            if (!card) return;
+            const container = card.querySelector('.options-container');
+            if (!container) return;
+
+            const currentOptions = container.querySelectorAll('.option-card-row');
+            if (currentOptions.length >= 6) {
+                alert('Максимальна кількість варіантів на один кейс — 6!');
+                return;
+            }
+
+            const nextIndex = currentOptions.length;
+            const nextLetter = String.fromCharCode(65 + nextIndex);
+            const axes = getAxesList();
+
+            const dummyOpt = {
+                letter: nextLetter,
+                text: '',
+                archetype: `Архетип ${nextLetter}`,
+                vectors: [
+                    { axis: axes[nextIndex % axes.length] || axes[0] || 'Стратегія', points: 45 },
+                    { axis: axes[(nextIndex + 1) % axes.length] || axes[1] || 'Стресостійкість', points: 38 }
+                ]
+            };
+
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = buildOptionRowHtml(dummyOpt, nextIndex, axes);
+            const newRow = tempDiv.firstElementChild;
+            container.appendChild(newRow);
+
+            updateOptionIndices(card);
+            const input = newRow.querySelector('.option-text-input');
+            if (input) input.focus();
+        }
+
+        function removeOption(btn) {
+            const card = btn.closest('.case-card');
+            const row = btn.closest('.option-card-row');
+            if (!card || !row) return;
+
+            const container = card.querySelector('.options-container');
+            const allOptions = container.querySelectorAll('.option-card-row');
+            if (allOptions.length <= 2) {
+                alert('Кейс повинен містити щонайменше 2 варіанти вибору!');
+                return;
+            }
+
+            row.remove();
+            updateOptionIndices(card);
+        }
+
+        function updateOptionIndices(card) {
+            const rows = card.querySelectorAll('.option-card-row');
+            rows.forEach((row, idx) => {
+                const letter = String.fromCharCode(65 + idx);
+                row.dataset.letter = letter;
+                const badge = row.querySelector('.option-letter-badge');
+                if (badge) badge.textContent = letter;
+                const removeBtn = row.querySelector('.btn-remove-option');
+                if (removeBtn) {
+                    removeBtn.title = `Видалити варіант ${letter}`;
+                    removeBtn.style.display = rows.length > 2 ? 'flex' : 'none';
+                }
+                const textInput = row.querySelector('.option-text-input');
+                if (textInput && (!textInput.placeholder || textInput.placeholder.includes('варіанту'))) {
+                    textInput.placeholder = `Опис стратегії або дії для варіанту ${letter}...`;
+                }
+            });
+
+            const countBadge = card.querySelector('.options-count-badge');
+            if (countBadge) countBadge.textContent = rows.length;
+
+            const addBtn = card.querySelector('.btn-add-option');
+            if (addBtn) {
+                addBtn.style.display = rows.length >= 6 ? 'none' : 'inline-flex';
+            }
+        }
+
+        function createCaseCardElement(caseData, index, total) {
+            const card = document.createElement('div');
+            card.className = 'case-card';
+            card.dataset.category = caseData.category || 'Ситуаційний вибір';
+            card.style.cssText = 'background: #ffffff; border: 1px solid #e2e8f0; border-radius: 20px; padding: 32px; margin-bottom: 24px; box-shadow: 0 4px 16px rgba(0,0,0,0.03); transition: all 0.3s ease;';
+
+            const currentAxes = getAxesList();
+            let optionsHtml = '';
+            const options = (caseData.options && caseData.options.length > 0) ? caseData.options : [
+                { letter: 'A', text: '', archetype: 'Емпатичний Ментор' },
+                { letter: 'B', text: '', archetype: 'Системний Стратег' }
+            ];
+
+            options.forEach((opt, oIdx) => {
+                optionsHtml += buildOptionRowHtml(opt, oIdx, currentAxes);
+            });
+
+            card.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+                    <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: #8a00c2;">
+                        КРОК 3 • КЕЙС <span class="case-idx">${index}</span> З <span class="case-total">${total}</span>
+                        ${caseData.category ? `<span style="margin-left: 8px; color: #64748b; text-transform: none; font-weight: 600;">[${caseData.category}]</span>` : ''}
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 12px; font-weight: 700; color: #059669; background: #ecfdf5; padding: 3px 10px; border-radius: 9999px;">
+                            ✓ Ваги збалансовані
+                        </span>
+                        <button type="button" class="btn-delete-case" onclick="removeCase(this)" style="background: #fff1f2; border: 1px solid #fecdd3; color: #e11d48; padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="Видалити цей кейс">
+                            ✕ Видалити кейс
+                        </button>
+                    </div>
+                </div>
+
+                <h3 style="font-size: 20px; font-weight: 800; color: #0f172a; margin-bottom: 16px;">
+                    Формулювання ситуаційної дилеми
+                </h3>
+
+                <div style="margin-bottom: 24px;">
+                    <input type="text" class="case-title-input" value="${(caseData.title || '').replace(/"/g, '&quot;')}" style="width: 100%; padding: 14px 16px; border: 1.5px solid #8a00c2; border-radius: 12px; font-size: 16px; font-weight: 700; color: #0f172a; outline: none; margin-bottom: 10px; box-sizing: border-box;" placeholder="Питання дилеми: що ви зробите?" />
+                    <textarea rows="2" class="case-context-input" style="width: 100%; padding: 10px 14px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 13px; color: #64748b; outline: none; box-sizing: border-box;" placeholder="Опис контексту та напруги кейсу...">${caseData.context || ''}</textarea>
+                </div>
+
+                <div style="font-size: 14px; font-weight: 800; color: #0f172a; margin-bottom: 12px;">
+                    Стратегії дій та їхній вплив на осі:
+                </div>
+
+                <div class="options-container" style="display: flex; flex-direction: column;">
+                    ${optionsHtml}
+                </div>
+
+                <div style="margin-top: 14px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                    <button type="button" class="btn-add-option" onclick="addOptionToCase(this)" style="display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; background: #f8fafc; border: 1.5px dashed #8a00c2; color: #8a00c2; border-radius: 10px; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s;">
+                        <span>+ Додати варіант відповіді</span>
+                    </button>
+                    <div style="font-size: 12px; color: #94a3b8; font-weight: 600;">
+                        Варіантів: <span class="options-count-badge">${options.length}</span> (від 2 до 6)
+                    </div>
+                </div>
+            `;
+
+            updateOptionIndices(card);
+            return card;
+        }
+
+        // 1. Повноцінна генерація всієї матриці через Gemini API
+        async function generateMatrixWithAi() {
+            const titleInput = document.getElementById('matrixTitleInput');
+            const descInput = document.getElementById('matrixDescInput');
+            const topic = titleInput ? titleInput.value.trim() : "Оцінка лідерського потенціалу в IT-стартапах";
+
+            showAiOverlay("Gemini розраховує багатовимірний простір...", "Генеруємо адаптивні осі спайдер-діаграми та 4 глибокі робочі дилеми для теми: " + topic);
+
+            try {
+                const response = await fetch('/api/generate-matrix', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        topic: topic,
+                        context: descInput ? descInput.value.trim() : "",
+                        caseCount: 4
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Помилка сервера при зверненні до Gemini: код ' + response.status);
+                }
+
+                const data = await response.json();
+
+                if (data.title && titleInput) titleInput.value = data.title;
+                if (data.description && descInput) descInput.value = data.description;
+
+                if (Array.isArray(data.axes) && data.axes.length > 0) {
+                    renderAxes(data.axes);
+                }
+
+                if (Array.isArray(data.cases) && data.cases.length > 0) {
+                    const container = document.getElementById('casesContainer');
+                    container.innerHTML = '';
+                    data.cases.forEach((c, idx) => {
+                        container.appendChild(createCaseCardElement(c, idx + 1, data.cases.length));
+                    });
+                    updateCaseIndices();
+                }
+
+                hideAiOverlay();
+            } catch (err) {
+                hideAiOverlay();
+                console.error('AI generation error:', err);
+                alert('Не вдалося згенерувати матрицю через ШІ: ' + err.message + '\nСпробуйте ще раз або перевірте інтернет.');
+            }
+        }
+
+        // 2. Додавання одного окремого унікального кейсу через Gemini API
+        async function addAiCase() {
+            const titleInput = document.getElementById('matrixTitleInput');
+            const topic = titleInput ? titleInput.value.trim() : "Оцінка стилю прийняття рішень";
+            const axes = getAxesList();
+            const container = document.getElementById('casesContainer');
+            const currentCount = container.querySelectorAll('.case-card').length;
+            const newIndex = currentCount + 1;
+
+            showAiOverlay("Gemini створює дилему №" + newIndex + "...", "Калібруємо 4 альтернативні поведінкові стратегії під осі: " + axes.slice(0, 3).join(', '));
+
+            try {
+                const response = await fetch('/api/generate-single-case', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        topic: topic,
+                        axes: axes,
+                        caseNumber: newIndex
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Код відповіді сервера: ' + response.status);
+                }
+
+                const caseData = await response.json();
+                const card = createCaseCardElement(caseData, newIndex, newIndex);
+                container.appendChild(card);
+                updateCaseIndices();
+                hideAiOverlay();
+                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } catch (err) {
+                hideAiOverlay();
+                console.warn('AI single case error, using manual fallback:', err);
+                addNewManualCase();
+            }
+        }
+
+        // 3. Додавання порожнього кейсу вручну
+        function addNewManualCase() {
+            const container = document.getElementById('casesContainer');
+            const currentCount = container.querySelectorAll('.case-card').length;
+            const newIndex = currentCount + 1;
+            const axes = getAxesList();
+
+            const dummyCase = {
+                title: `Нова робоча ситуація №${newIndex}. Ваші дії?`,
+                context: "Опишіть передумови, виклики та конфлікт інтересів у цій ситуації...",
+                category: "Ситуаційний вибір",
+                options: [
+                    {
+                        letter: "A",
+                        text: "Стратегія А: Відкритий діалог та спільний пошук рішення",
+                        archetype: "Емпатичний Дипломат",
+                        vectors: [{ axis: axes[0] || "Емпатія & Довіра", points: 48 }, { axis: axes[1] || "Стресостійкість", points: 38 }],
+                        stats: { leadership: "75%", logic: "80%", adaptability: "70%", empathy: "90%" }
+                    },
+                    {
+                        letter: "B",
+                        text: "Стратегія B: Структурувати процеси та встановити чіткі межі",
+                        archetype: "Системний Стратег",
+                        vectors: [{ axis: axes[1] || "Логіка & Архітектура", points: 50 }, { axis: axes[2] || "Кризове лідерство", points: 42 }],
+                        stats: { leadership: "88%", logic: "85%", adaptability: "75%", empathy: "65%" }
+                    },
+                    {
+                        letter: "C",
+                        text: "Стратегія C: Взяти особисту відповідальність та ініціативу",
+                        archetype: "Рішучий Лідер",
+                        vectors: [{ axis: axes[2] || "Кризове лідерство", points: 52 }, { axis: axes[0] || "Емпатія & Довіра", points: 35 }],
+                        stats: { leadership: "92%", logic: "78%", adaptability: "80%", empathy: "60%" }
+                    },
+                    {
+                        letter: "D",
+                        text: "Стратегія D: Знайти швидкий обхідний маневр для мінімізації втрат",
+                        archetype: "Гнучкий Практик",
+                        vectors: [{ axis: axes[3] || "Адаптивність", points: 48 }, { axis: axes[4] || "Стресостійкість", points: 44 }],
+                        stats: { leadership: "80%", logic: "72%", adaptability: "92%", empathy: "75%" }
+                    }
+                ]
+            };
+
+            const card = createCaseCardElement(dummyCase, newIndex, newIndex);
+            container.appendChild(card);
+            updateCaseIndices();
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // 4. Збір даних з DOM у єдиний JSON-об'єкт
+        function collectMatrixData() {
+            const titleInput = document.getElementById('matrixTitleInput');
+            const descInput = document.getElementById('matrixDescInput');
+            const axes = getAxesList();
+
+            const cases = [];
+            document.querySelectorAll('#casesContainer .case-card').forEach((card, idx) => {
+                const title = card.querySelector('.case-title-input')?.value.trim() || `Дилема №${idx + 1}`;
+                const context = card.querySelector('.case-context-input')?.value.trim() || '';
+                const category = card.dataset.category || 'Ситуаційний вибір';
+
+                const options = [];
+                card.querySelectorAll('.option-card-row').forEach((row, oIdx) => {
+                    const letter = row.querySelector('.option-letter-badge')?.textContent.trim() || String.fromCharCode(65 + oIdx);
+                    const text = row.querySelector('.option-text-input')?.value.trim() || `Стратегія ${letter}`;
+                    const archetype = row.querySelector('.option-archetype-input')?.value.trim() || `Архетип ${letter}`;
+
+                    const vectors = [];
+                    row.querySelectorAll('.vector-item').forEach(vItem => {
+                        const axSel = vItem.querySelector('.vector-axis-select');
+                        const ptsInput = vItem.querySelector('.vector-points-input');
+                        if (axSel && ptsInput) {
+                            const axVal = axSel.value;
+                            const ptsVal = parseInt(ptsInput.value) || 40;
+                            if (axVal) {
+                                vectors.push({ axis: axVal, points: ptsVal });
+                            }
+                        }
+                    });
+
+                    if (vectors.length === 0) {
+                        vectors.push({ axis: axes[0] || 'Стратегія', points: 45 });
+                    }
+
+                    // Розрахунок збалансованих відсотків на основі налаштованих векторів
+                    let stats = null;
+                    try {
+                        if (row.dataset.stats) stats = JSON.parse(row.dataset.stats);
+                    } catch (e) {}
+
+                    if (!stats || Object.keys(stats).length === 0) {
+                        let l = 65, log = 70, ad = 70, emp = 65;
+                        vectors.forEach(v => {
+                            const ax = (v.axis || '').toLowerCase();
+                            const pts = Math.min(Math.max(v.points || 40, 10), 100);
+                            if (ax.includes('лідер') || ax.includes('криз')) l += Math.round(pts * 0.35);
+                            if (ax.includes('логік') || ax.includes('архітект') || ax.includes('безпек')) log += Math.round(pts * 0.35);
+                            if (ax.includes('адапт') || ax.includes('гнучк') || ax.includes('інновац')) ad += Math.round(pts * 0.35);
+                            if (ax.includes('емпат') || ax.includes('довір') || ax.includes('людин') || ax.includes('стрес')) emp += Math.round(pts * 0.35);
+                        });
+                        stats = {
+                            leadership: `${Math.min(98, Math.max(50, l))}%`,
+                            logic: `${Math.min(98, Math.max(50, log))}%`,
+                            adaptability: `${Math.min(98, Math.max(50, ad))}%`,
+                            empathy: `${Math.min(98, Math.max(50, emp))}%`
+                        };
+                    }
+
+                    options.push({ letter, text, archetype, vectors, stats });
+                });
+
+                cases.push({
+                    id: idx + 1,
+                    title,
+                    context,
+                    category,
+                    options
+                });
+            });
+
+            return {
+                title: titleInput ? titleInput.value.trim() : 'Авторська матриця',
+                description: descInput ? descInput.value.trim() : '',
+                axes: axes,
+                cases: cases
+            };
+        }
+
+        // 5. Збереження в чернетки
+        function saveDraft() {
+            const matrix = collectMatrixData();
+            localStorage.setItem('smarttest_custom_matrix', JSON.stringify(matrix));
+            localStorage.setItem('smarttest_draft', JSON.stringify({
+                title: matrix.title,
+                savedAt: new Date().toLocaleTimeString('uk-UA', { hour: '2-digit', minute: '2-digit' }),
+                casesCount: matrix.cases.length
+            }));
+
+            alert('✓ Чернетку успішно збережено!');
+            window.location.href = '/drafts';
+        }
+
+        // 6. Опублікувати та відкрити для проходження тесту
+        function publishAndOpenTest() {
+            const matrix = collectMatrixData();
+            if (!matrix.cases || matrix.cases.length === 0) {
+                alert('Матриця повинна містити щонайменше 1 кейс для публікації!');
+                return;
+            }
+
+            localStorage.setItem('smarttest_custom_matrix', JSON.stringify(matrix));
+            localStorage.setItem('smarttest_draft', JSON.stringify({
+                title: matrix.title,
+                savedAt: new Date().toLocaleTimeString('uk-UA', { hour: '2-digit', minute: '2-digit' }),
+                casesCount: matrix.cases.length
+            }));
+
+            // Перехід на тестування з прапорцем авторської матриці
+            window.location.href = '/question?matrix=custom';
+        }
+
+        // 7. Відновлення чернетки при завантаженні сторінки
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('casesContainer');
+
+            try {
+                const saved = localStorage.getItem('smarttest_custom_matrix');
+                if (saved) {
+                    const matrix = JSON.parse(saved);
+                    if (matrix) {
+                        const titleInput = document.getElementById('matrixTitleInput');
+                        const descInput = document.getElementById('matrixDescInput');
+                        if (matrix.title && titleInput) titleInput.value = matrix.title;
+                        if (matrix.description && descInput) descInput.value = matrix.description;
+
+                        if (Array.isArray(matrix.axes) && matrix.axes.length > 0) {
+                            renderAxes(matrix.axes);
+                        }
+
+                        if (Array.isArray(matrix.cases) && matrix.cases.length > 0) {
+                            container.innerHTML = '';
+                            matrix.cases.forEach((c, idx) => {
+                                container.appendChild(createCaseCardElement(c, idx + 1, matrix.cases.length));
+                            });
+                            updateCaseIndices();
+                        }
+
+                        const banner = document.getElementById('loadedDraftBanner');
+                        const bannerTitle = document.getElementById('loadedDraftTitleText');
+                        if (banner && bannerTitle) {
+                            bannerTitle.textContent = matrix.title || 'Збережена авторська матриця';
+                            banner.style.display = 'flex';
+                        }
+                    }
+                } else {
+                    // Якщо чернетка відсутня, оновлюємо селекти та стан для початкового кейсу
+                    syncAllVectorSelects();
+                    updateCaseIndices();
+                    const initialCard = container.querySelector('.case-card');
+                    if (initialCard) updateOptionIndices(initialCard);
+                }
+            } catch (e) {
+                console.warn('Помилка гідрації чернетки:', e);
+            }
+
+            // Оновлення нікнейму користувача в шапці (якщо виконано вхід)
+            try {
+                const userRaw = localStorage.getItem('smarttest_user');
+                if (userRaw) {
+                    const user = JSON.parse(userRaw);
+                    const btn = document.querySelector('.btn-login span');
+                    if (btn && user.nickname) btn.textContent = '@@' + user.nickname;
+                }
+            } catch (e) {}
+        });
+
+        // 8. Очищення поточної чернетки для створення нової
+        function resetDraftAndClearForm() {
+            if (confirm('Скинути збережену чернетку та почати з нової чистої форми?')) {
+                localStorage.removeItem('smarttest_custom_matrix');
+                localStorage.removeItem('smarttest_draft');
+                window.location.reload();
+            }
+        }
+    </script>
+
+</body>
+</html>
+
+
+
+

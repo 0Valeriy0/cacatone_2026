@@ -1,0 +1,326 @@
+@* 
+    SmartTest — Особистий кабінет: Опубліковані тести та аналітика
+    Чистий Razor (.cshtml) + CSS
+*@
+@{
+    Layout = null;
+    ViewData["Title"] = "SmartTest — Опубліковані тести та аналітика";
+}
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <meta name="description" content="Управління опублікованими тестами, зведена AI-аналітика та перегляд відповідей кандидатів." />
+
+    <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Стилі -->
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/style.css" />
+</head>
+<body style="background-color: #f8f9fa; min-height: 100vh; display: flex; flex-direction: column;">
+
+    <!-- 1. Header (Шапка сайту) -->
+    <header class="site-header">
+        <div class="container header-container">
+            <a href="/" class="logo">
+                <div class="logo-icon-box">
+                    <div class="logo-icon-inner">
+                        <svg class="logo-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 4.5a2.5 2.5 0 0 0-4.96-.46 2.5 2.5 0 0 0-1.98 3 2.5 2.5 0 0 0-1.32 4.24 3 3 0 0 0 .34 5.58 2.5 2.5 0 0 0 2.96 3.08A2.5 2.5 0 0 0 12 19.5a2.5 2.5 0 0 0 4.96.46 2.5 2.5 0 0 0 1.98-3 2.5 2.5 0 0 0 1.32-4.24 3 3 0 0 0-.34-5.58 2.5 2.5 0 0 0-2.96-3.08A2.5 2.5 0 0 0 12 4.5z"></path>
+                        </svg>
+                        <span class="logo-dot"></span>
+                    </div>
+                </div>
+                <div class="logo-text-group">
+                    <span class="logo-title">Smart<span class="text-accent">Test</span></span>
+                    <span class="logo-subtitle">Платформа багатовимірного AI-профілювання</span>
+                </div>
+            </a>
+
+            <!-- Навігація з активним пунктом "Чернетки" / Кабінет -->
+            <nav class="nav-menu">
+                <a href="/" class="nav-link">Головна</a>
+                <a href="/#directions" class="nav-link">Напрямки</a>
+                <a href="/drafts" class="nav-link active" style="position: relative;">
+                    Чернетки
+                    <span style="display: inline-block; width: 8px; height: 8px; background: #8a00c2; border-radius: 9999px; margin-left: 4px; vertical-align: top;"></span>
+                </a>
+                <a href="/result" class="nav-link">AI-вердикти</a>
+                <a href="/#methodology" class="nav-link">Про платформу</a>
+            </nav>
+
+            <div class="header-actions" style="display: flex; gap: 12px; align-items: center;">
+                <a href="/create" class="btn-primary-cta" style="padding: 10px 20px; font-size: 13px;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    <span>Створити матрицю</span>
+                </a>
+                <a href="/login" class="btn-login" style="text-decoration: none; padding: 9px 16px; font-size: 13px;" title="Особистий профіль / Змінити користувача">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span>@@ivan_lead</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Основний контент кабінету -->
+    <main style="flex-grow: 1; padding: 40px 0 80px;">
+        <div class="container" style="max-width: 1060px;">
+
+            <!-- Заголовок розділу -->
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 28px; flex-wrap: wrap; gap: 16px;">
+                <div>
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                        <span class="badge-pill-accent">ОСОБИСТИЙ КАБІНЕТ</span>
+                        <span style="font-size: 13px; color: #059669; font-weight: 700;">🟢 2 активні тести онлайн</span>
+                    </div>
+                    <h1 style="font-size: 32px; font-weight: 900; color: #0f172a; margin: 0; letter-spacing: -0.5px;">
+                        Опубліковані тести
+                    </h1>
+                    <p style="font-size: 15px; color: #64748b; margin: 6px 0 0;">
+                        Активні матриці тестування, що доступні респондентам за прямими посиланнями. Відстежуйте статистику проходжень та аналітику архетипів.
+                    </p>
+                </div>
+
+                <a href="/create" class="btn-primary-cta" style="padding: 12px 22px; font-size: 14px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    <span>Нова матриця тесту</span>
+                </a>
+            </div>
+
+            <!-- Вкладки фільтрів -->
+            <div style="display: flex; gap: 12px; margin-bottom: 28px; border-bottom: 1.5px solid #e2e8f0; padding-bottom: 12px; overflow-x: auto;">
+                <a href="/drafts" style="background: #ffffff; border: 1.5px solid #e2e8f0; color: #64748b; padding: 8px 18px; border-radius: 9999px; font-size: 13px; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 6px;">
+                    <span>Чернетки</span>
+                    <span style="background: #f1f5f9; color: #475569; font-size: 11px; padding: 2px 7px; border-radius: 9999px;">1</span>
+                </a>
+                <a href="/published" style="background: #fbf2ff; border: 1.5px solid #8a00c2; color: #8a00c2; padding: 8px 18px; border-radius: 9999px; font-size: 13px; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(138,0,194,0.12);">
+                    <span>Опубліковані тести</span>
+                    <span style="background: #8a00c2; color: #fff; font-size: 11px; padding: 2px 7px; border-radius: 9999px;">2</span>
+                </a>
+                <a href="/all" style="background: #ffffff; border: 1.5px solid #e2e8f0; color: #64748b; padding: 8px 18px; border-radius: 9999px; font-size: 13px; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 6px;">
+                    <span>Всі записи (3)</span>
+                </a>
+            </div>
+
+            <!-- СПИСОК ОПУБЛІКОВАНИХ ТЕСТІВ -->
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+                
+                <!-- Аналітична зведена плашка -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 8px;">
+                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 20px 22px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                        <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.6px; color: #8a00c2; margin-bottom: 6px;">Всього проходжень</div>
+                        <div style="font-size: 28px; font-weight: 900; color: #0f172a; line-height: 1;">231 <span style="font-size: 13px; font-weight: 700; color: #059669;">+18 цього тижня</span></div>
+                        <div style="font-size: 12px; color: #64748b; margin-top: 4px;">У 2 активних тестах</div>
+                    </div>
+                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 20px 22px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                        <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.6px; color: #8a00c2; margin-bottom: 6px;">Завершуваність</div>
+                        <div style="font-size: 28px; font-weight: 900; color: #0f172a; line-height: 1;">92.8%</div>
+                        <div style="font-size: 12px; color: #059669; margin-top: 4px;">✓ Висока валідність відповідей</div>
+                    </div>
+                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 20px 22px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                        <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.6px; color: #8a00c2; margin-bottom: 6px;">Середній час</div>
+                        <div style="font-size: 28px; font-weight: 900; color: #0f172a; line-height: 1;">7 хв 45 с</div>
+                        <div style="font-size: 12px; color: #64748b; margin-top: 4px;">~58 сек на ситуаційний кейс</div>
+                    </div>
+                    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 18px; padding: 20px 22px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                        <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.6px; color: #8a00c2; margin-bottom: 6px;">Топ-архетип вибірки</div>
+                        <div style="font-size: 17px; font-weight: 900; color: #0f172a; line-height: 1.3; margin-top: 4px;">Дипломатичний Архітектор</div>
+                        <div style="font-size: 12px; color: #8a00c2; font-weight: 700; margin-top: 2px;">38% серед кандидатів</div>
+                    </div>
+                </div>
+
+                <!-- Опублікований тест 1 -->
+                <div style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 22px; padding: 28px 32px; box-shadow: 0 2px 10px rgba(0,0,0,0.02); transition: all 0.2s;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; background: #ecfdf5; border: 1px solid #d1fae5; color: #059669; border-radius: 9999px; font-size: 12px; font-weight: 800; text-transform: uppercase;">
+                                <span style="width: 8px; height: 8px; border-radius: 9999px; background: #10b981; display: inline-block;"></span>
+                                Опубліковано • Активний тест
+                            </span>
+                            <span style="font-size: 13px; color: #94a3b8; font-weight: 600;">ID: #ST-8402</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <span style="font-size: 13px; color: #0f172a; font-weight: 700;">
+                                👥 142 кандидати пройшли
+                            </span>
+                            <span style="font-size: 12px; font-weight: 700; color: #8a00c2; background: #fbf2ff; padding: 4px 10px; border-radius: 9999px; border: 1px solid #e4b6ff;">
+                                94% завершуваність
+                            </span>
+                        </div>
+                    </div>
+
+                    <h3 style="font-size: 21px; font-weight: 800; color: #0f172a; margin: 0 0 8px;">
+                        Адаптивність до невизначеності у продуктових командах
+                    </h3>
+                    <p style="font-size: 14px; color: #64748b; margin: 0 0 16px; line-height: 1.5;">
+                        8 ситуаційних дилем • 6 осей • Визначає архетипи: Драйвер, Стабілізатор, Інноватор. Оптимально для Middle/Senior Product Managers та Team Leads.
+                    </p>
+
+                    <!-- Осі та середні бали -->
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;">
+                        <span class="badge-pill-accent" style="background: #f0faf4; color: #059669; border: 1px solid #d1fae5;">Адаптивність (84% сер.)</span>
+                        <span class="badge-pill-accent" style="background: #fff2f4; color: #e11d48; border: 1px solid #ffe4e6;">Стресостійкість (78% сер.)</span>
+                        <span class="badge-pill-accent" style="background: #f0f5ff; color: #2563eb; border: 1px solid #dbeafe;">Логіка (91% сер.)</span>
+                        <span class="badge-pill-accent" style="background: #fbf2ff; color: #8a00c2; border: 1px solid #e4b6ff;">Емпатія (76% сер.)</span>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; border-top: 1px solid #f1f5f9; padding-top: 16px;">
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <a href="/question" class="btn-primary-cta" style="padding: 9px 18px; font-size: 13px; text-decoration: none;">
+                                <span>Відкрити тест</span>
+                            </a>
+                            <a href="/result" class="btn-secondary-cta" style="padding: 9px 18px; font-size: 13px; text-decoration: none;">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                                </svg>
+                                <span>Зведена AI-аналітика</span>
+                            </a>
+                            <button type="button" onclick="copyTestLink('adaptability')" class="btn-secondary-cta" style="padding: 9px 16px; font-size: 13px; cursor: pointer;">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                <span>Копіювати лінк</span>
+                            </button>
+                        </div>
+                        <span style="font-size: 12px; color: #94a3b8; font-weight: 500;">Останнє проходження: 25 хв тому</span>
+                    </div>
+                </div>
+
+                <!-- Опублікований тест 2 -->
+                <div style="background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 22px; padding: 28px 32px; box-shadow: 0 2px 10px rgba(0,0,0,0.02); transition: all 0.2s;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; background: #ecfdf5; border: 1px solid #d1fae5; color: #059669; border-radius: 9999px; font-size: 12px; font-weight: 800; text-transform: uppercase;">
+                                <span style="width: 8px; height: 8px; border-radius: 9999px; background: #10b981; display: inline-block;"></span>
+                                Опубліковано • Активний тест
+                            </span>
+                            <span style="font-size: 13px; color: #94a3b8; font-weight: 600;">ID: #ST-7190</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <span style="font-size: 13px; color: #0f172a; font-weight: 700;">
+                                👥 89 кандидатів пройшли
+                            </span>
+                            <span style="font-size: 12px; font-weight: 700; color: #8a00c2; background: #fbf2ff; padding: 4px 10px; border-radius: 9999px; border: 1px solid #e4b6ff;">
+                                91% завершуваність
+                            </span>
+                        </div>
+                    </div>
+
+                    <h3 style="font-size: 21px; font-weight: 800; color: #0f172a; margin: 0 0 8px;">
+                        Емоційний інтелект та фасилітація для Tech Lead
+                    </h3>
+                    <p style="font-size: 14px; color: #64748b; margin: 0 0 16px; line-height: 1.5;">
+                        6 ситуаційних дилем • 5 осей • Визначає архетипи: Дипломатичний Архітектор, Коуч, Модератор суперечок.
+                    </p>
+
+                    <!-- Осі та середні бали -->
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;">
+                        <span class="badge-pill-accent" style="background: #fbf2ff; color: #8a00c2; border: 1px solid #e4b6ff;">Емпатія & Довіра (88% сер.)</span>
+                        <span class="badge-pill-accent" style="background: #fffaf0; color: #d97706; border: 1px solid #fef3c7;">Деескалація (82% сер.)</span>
+                        <span class="badge-pill-accent" style="background: #f0f5ff; color: #2563eb; border: 1px solid #dbeafe;">Командна синергія (86% сер.)</span>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; border-top: 1px solid #f1f5f9; padding-top: 16px;">
+                        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                            <a href="/question" class="btn-primary-cta" style="padding: 9px 18px; font-size: 13px; text-decoration: none;">
+                                <span>Відкрити тест</span>
+                            </a>
+                            <a href="/result" class="btn-secondary-cta" style="padding: 9px 18px; font-size: 13px; text-decoration: none;">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                                </svg>
+                                <span>Зведена AI-аналітика</span>
+                            </a>
+                            <button type="button" onclick="copyTestLink('eq-techlead')" class="btn-secondary-cta" style="padding: 9px 16px; font-size: 13px; cursor: pointer;">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                                <span>Копіювати лінк</span>
+                            </button>
+                        </div>
+                        <span style="font-size: 12px; color: #94a3b8; font-weight: 500;">Останнє проходження: 2 год тому</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer" style="margin-top: auto;">
+        <div class="container footer-content">
+            <div class="logo">
+                <div class="logo-icon-box" style="width: 36px; height: 36px;">
+                    <div class="logo-icon-inner">
+                        <svg class="logo-icon-svg" style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 4.5a2.5 2.5 0 0 0-4.96-.46 2.5 2.5 0 0 0-1.98 3 2.5 2.5 0 0 0-1.32 4.24 3 3 0 0 0 .34 5.58 2.5 2.5 0 0 0 2.96 3.08A2.5 2.5 0 0 0 12 19.5a2.5 2.5 0 0 0 4.96.46 2.5 2.5 0 0 0 1.98-3 2.5 2.5 0 0 0 1.32-4.24 3 3 0 0 0-.34-5.58 2.5 2.5 0 0 0-2.96-3.08A2.5 2.5 0 0 0 12 4.5z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="logo-text-group">
+                    <span class="logo-title" style="font-size: 18px;">Smart<span class="text-accent">Test</span></span>
+                    <span class="logo-subtitle">Платформа багатовимірного AI-профілювання</span>
+                </div>
+            </div>
+
+            <div class="footer-copy">
+                © 2026 SmartTest AI Profiling. Всі права захищені.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Скрипти кабінету -->
+    <script>
+        function copyTestLink(slug) {
+            const url = window.location.origin + window.location.pathname.replace(/[^\/]+$/, 'question') + '?matrix=' + slug;
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(url).then(() => {
+                    alert('✓ Посилання для проходження тесту скопійовано:\n' + url);
+                }).catch(() => {
+                    alert('Посилання на тест:\n' + url);
+                });
+            } else {
+                alert('Посилання на тест:\n' + url);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                const userRaw = localStorage.getItem('smarttest_user');
+                if (userRaw) {
+                    const user = JSON.parse(userRaw);
+                    const btn = document.querySelector('.btn-login span');
+                    if (btn && user.nickname) btn.textContent = '@@' + user.nickname;
+                }
+            } catch (e) {}
+        });
+    </script>
+
+</body>
+</html>
+
+
+

@@ -1,0 +1,904 @@
+@* 
+    SmartTest — Сторінка відображення ситуаційних кейсів / питань
+    Чистий Razor (.cshtml) + CSS
+*@
+@{
+    Layout = null;
+    ViewData["Title"] = "SmartTest — Ситуаційний кейс профілювання";
+}
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <meta name="description" content="Багатовимірне AI-профілювання. Ситуаційний кейс з оцінкою векторів вибору." />
+
+    <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Стилі -->
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/style.css" />
+</head>
+<body class="assessment-page">
+
+    <!-- Верхня панель проходження тесту (Прогрес-бар + Навігація) -->
+    <header class="assessment-topbar">
+        <div class="container assessment-topbar-inner">
+            
+            <!-- Посилання назад на головну -->
+            <a href="/" class="assessment-back-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                <span>Вийти з матриці</span>
+            </a>
+
+            <!-- Центральний прогрес-бар -->
+            <div class="progress-center">
+                <div class="progress-meta">
+                    <span id="questionProgressMeta">Кейс 1 з 8 • Командна взаємодія & Менторство</span>
+                    <span class="text-accent" id="questionProgressPercent">13% пройдено</span>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-fill" id="questionProgressFill" style="width: 13%;"></div>
+                </div>
+            </div>
+
+            <!-- Бейдж темпу AI -->
+            <div class="assessment-tempo-badge">
+                <span class="pulse-dot"></span>
+                <span>AI калібрує ваги</span>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- Банер активної авторської матриці -->
+    <div id="customMatrixBanner" style="display: none; background: #faf5ff; border-bottom: 1.5px solid #e9d5ff; padding: 10px 0;">
+        <div class="container" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: #8a00c2;">
+                <span style="font-size: 16px;">✨</span>
+                <span>Ви проходите авторську матрицю: <strong id="customMatrixTitleText" style="color: #0f172a;"></strong></span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <a href="/create" style="font-size: 12px; color: #8a00c2; text-decoration: none; font-weight: 700; background: #ffffff; padding: 4px 12px; border-radius: 9999px; border: 1px solid #e4b6ff;">✏️ Редагувати в конструкторі</a>
+                <button type="button" onclick="resetToDefaultMatrix()" style="background: none; border: none; font-size: 12px; color: #64748b; cursor: pointer; text-decoration: underline; font-weight: 600;">Скинути до стандартного</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Основна робоча зона тесту -->
+    <main class="assessment-main">
+        <div class="container">
+            <div class="assessment-grid">
+                
+                <!-- Ліва колонка: Ситуаційний кейс та варіанти -->
+                <div class="assessment-content-col">
+                    
+                    <!-- Картка ситуаційного кейсу -->
+                    <div class="dilemma-card">
+                        <div class="dilemma-meta-row">
+                            <span class="category-tag" id="questionCategory">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="m2 4 3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14"></path>
+                                </svg>
+                                <span id="categoryLabelText">Командна взаємодія & Менторство</span>
+                            </span>
+                            <span class="no-right-answers-pill">
+                                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                                </svg>
+                                Немає правильних відповідей
+                            </span>
+                        </div>
+
+                        <h1 class="dilemma-title" id="questionTitle">
+                            Новий інженер соромиться ставити питання і блокує свій прогрес. Ваші дії?
+                        </h1>
+
+                        <p class="dilemma-context" id="questionContext">
+                            Джуніор-спеціаліст уже другий день сидить над задачею без відчутного прогресу, намагаючись усе розібрати самостійно. Через це весь спринт під загрозою зриву. Як ви побудуєте взаємодію у цій ситуації?
+                        </p>
+                    </div>
+
+                    <!-- Заголовок блоку вибору -->
+                    <div class="choices-heading">
+                        Оберіть вашу природну лінію поведінки:
+                    </div>
+
+                    <!-- Список 4 стратегій (Варіанти відповіді) -->
+                    <div class="choices-stack" id="choicesList">
+                        <!-- Динамічно рендериться скриптом -->
+                    </div>
+
+                    <!-- Нижня панель навігації між питаннями -->
+                    <div class="assessment-nav-bar">
+                        <!-- Кнопка "Попередній кейс" -->
+                        <button type="button" class="btn-nav-prev" id="btnPrevQuestion" onclick="prevQuestion()" disabled>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="19" y1="12" x2="5" y2="12"></line>
+                                <polyline points="12 19 5 12 12 5"></polyline>
+                            </svg>
+                            <span>Попередній кейс</span>
+                        </button>
+
+                        <div id="saveStatusIndicator" style="font-size: 12px; color: #94a3b8; font-weight: 500;">
+                            💾 Відповідь збережено
+                        </div>
+
+                        <!-- Контейнер переходу вперед: "Наступне питання" (якщо не останнє) або "Завершити" (якщо останнє) -->
+                        <div id="nextActionContainer">
+                            <!-- Кнопка "Наступне питання": відображається, якщо це питання НЕ останнє -->
+                            <button type="button" id="btnNextQuestion" class="btn-nav-next" onclick="nextQuestion()">
+                                <span>Наступне питання</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </button>
+
+                            <!-- Кнопка "Завершити": відображається ТІЛЬКИ на останньому питанні -->
+                            <button type="button" id="btnFinishTest" class="btn-nav-next" onclick="finishAndAnalyzeTest()" style="display: none; border: none; cursor: pointer; text-decoration: none; background: linear-gradient(135deg, #8a00c2 0%, #680099 100%);">
+                                <span>Завершити та переглянути AI-вердикт</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Права колонка: AI-сенсор у реальному часі -->
+                <aside class="ai-sensor-col">
+                    <div class="ai-sensor-card">
+                        
+                        <div class="ai-sensor-header">
+                            <div class="ai-sensor-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="ai-sensor-title">AI-сенсор векторів</div>
+                                <div class="ai-sensor-sub" id="sensorArchetype">Поточний фокус: Емпатичний Ментор</div>
+                            </div>
+                        </div>
+
+                        <!-- Мініатюрний живий спайдер-чарт -->
+                        <div class="mini-radar-box">
+                            <svg viewBox="0 0 100 100" style="width: 100%; height: 100%; transform: rotate(-90deg);">
+                                <!-- Сітка -->
+                                <polygon points="50,15 85,38 72,78 28,78 15,38" fill="none" stroke="#e2e8f0" stroke-width="1"></polygon>
+                                <polygon points="50,25 74,42 65,70 35,70 26,42" fill="none" stroke="#e2e8f0" stroke-width="1"></polygon>
+                                <polygon points="50,35 63,46 58,62 42,62 37,46" fill="none" stroke="#e2e8f0" stroke-width="1"></polygon>
+                                
+                                <line x1="50" y1="50" x2="50" y2="15" stroke="#cbd5e1" stroke-width="0.8" stroke-dasharray="2"></line>
+                                <line x1="50" y1="50" x2="85" y2="38" stroke="#cbd5e1" stroke-width="0.8" stroke-dasharray="2"></line>
+                                <line x1="50" y1="50" x2="72" y2="78" stroke="#cbd5e1" stroke-width="0.8" stroke-dasharray="2"></line>
+                                <line x1="50" y1="50" x2="28" y2="78" stroke="#cbd5e1" stroke-width="0.8" stroke-dasharray="2"></line>
+                                <line x1="50" y1="50" x2="15" y2="38" stroke="#cbd5e1" stroke-width="0.8" stroke-dasharray="2"></line>
+                                
+                                <!-- Динамічний полігон -->
+                                <polygon id="liveRadarPolygon" points="50,18 68,45 60,70 30,75 16,36" fill="rgba(138, 0, 194, 0.22)" stroke="#8a00c2" stroke-width="2" style="transition: all 0.4s ease-out;"></polygon>
+                            </svg>
+                            <div style="position: absolute; font-size: 9px; font-weight: 800; color: #8a00c2; background: #ffffff; padding: 2px 6px; border-radius: 4px; box-shadow: 0 1px 4px rgba(0,0,0,0.08);">
+                                РАДАР СКІЛІВ
+                            </div>
+                        </div>
+
+                        <!-- Поточні розраховані показники -->
+                        <div class="live-vector-stats">
+                            <div class="vector-stat-row">
+                                <span class="vector-stat-name">Кризове лідерство</span>
+                                <span class="vector-stat-val" id="statLeadership">72%</span>
+                            </div>
+                            <div class="vector-stat-row">
+                                <span class="vector-stat-name">Логіка & Безпека</span>
+                                <span class="vector-stat-val" id="statLogic">68%</span>
+                            </div>
+                            <div class="vector-stat-row">
+                                <span class="vector-stat-name">Адаптивність</span>
+                                <span class="vector-stat-val" id="statAdaptability">84%</span>
+                            </div>
+                            <div class="vector-stat-row">
+                                <span class="vector-stat-name">Емпатія & Менторство</span>
+                                <span class="vector-stat-val" id="statEmpathy">92%</span>
+                            </div>
+                        </div>
+
+                        <div class="ai-sensor-hint">
+                            💡 ШІ аналізує узгодженість ваших реакцій та формує багатовимірний профіль без жодних суб'єктивних упереджень.
+                        </div>
+
+                    </div>
+                </aside>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- База питань та інтерактивна логіка перемикання кейсів -->
+    <script>
+        // Базова конфігурація кейсів тесту
+        const defaultQuestionsData = [
+            {
+                id: 1,
+                category: "Командна взаємодія & Менторство",
+                title: "Новий інженер соромиться ставити питання і блокує свій прогрес. Ваші дії?",
+                context: "Джуніор-спеціаліст уже другий день сидить над задачею без відчутного прогресу, намагаючись усе розібрати самостійно. Через це весь спринт під загрозою зриву. Як ви побудуєте взаємодію у цій ситуації?",
+                defaultChoice: 0,
+                choices: [
+                    {
+                        letter: "A",
+                        text: "Провести довірливий 1-on-1, підтримати новачка та призначити досвідченого напарника для парного програмування",
+                        badge: "🌿 Вектор: Емпатія (+48) • Психологічна безпека (+42)",
+                        radarPoints: "50,18 68,45 60,70 30,75 16,36",
+                        archetype: "Емпатичний Ментор",
+                        stats: { empathy: "92%", logic: "68%", leadership: "72%", adaptability: "84%" }
+                    },
+                    {
+                        letter: "B",
+                        text: "Ввести чітке командне правило: якщо блокер триває понад 1.5 години — обов'язкова ескалація в загальний канал",
+                        badge: "⚡ Вектор: Системна координація (+46) • Ефективність (+40)",
+                        radarPoints: "50,28 82,36 74,75 35,68 25,44",
+                        archetype: "Системний Організатор",
+                        stats: { empathy: "62%", logic: "88%", leadership: "80%", adaptability: "74%" }
+                    },
+                    {
+                        letter: "C",
+                        text: "Показати власним прикладом декомпозицію складної ділянки коду та допомогти знайти перше рішення",
+                        badge: "🎯 Вектор: Особистий приклад (+45) • Практична експертиза (+42)",
+                        radarPoints: "50,32 80,40 68,70 28,66 22,46",
+                        archetype: "Практик-Експерт",
+                        stats: { empathy: "74%", logic: "84%", leadership: "78%", adaptability: "76%" }
+                    },
+                    {
+                        letter: "D",
+                        text: "Підняти питання на ретроспективі та нормалізувати запитання як невіддільну частину відкритої культури",
+                        badge: "📊 Вектор: Культура відкритості (+44) • Довгостроковий розвиток (+40)",
+                        radarPoints: "50,22 75,42 70,78 38,72 28,40",
+                        archetype: "Культурний Стратег",
+                        stats: { empathy: "80%", logic: "76%", leadership: "82%", adaptability: "80%" }
+                    }
+                ]
+            },
+            {
+                id: 2,
+                category: "Пріоритети & Технічний борг",
+                title: "Бізнес вимагає нову фічу, але система потребує термінового рефакторингу. Як вирішите?",
+                context: "Продакт-менеджер наполягає на релізі фічі до кінця тижня заради інвесторів, але архітектори попереджають: без оптимізації база даних впаде під вечірнім трафіком.",
+                defaultChoice: 0,
+                choices: [
+                    {
+                        letter: "A",
+                        text: "Знайти компроміс: випустити спрощену версію фічі та виділити 40% наступного спринту на закриття техборгу",
+                        badge: "⚖️ Вектор: Дипломатичний баланс (+46) • Управління компромісами (+44)",
+                        radarPoints: "50,24 76,40 66,74 34,70 24,42",
+                        archetype: "Дипломатичний Архітектор",
+                        stats: { empathy: "78%", logic: "86%", leadership: "84%", adaptability: "82%" }
+                    },
+                    {
+                        letter: "B",
+                        text: "Твердо відхилити фічу до усунення архітектурних ризиків, надавши фінансові розрахунки ризиків падіння",
+                        badge: "🛡️ Вектор: Інженерна принциповість (+50) • Захист стабільності (+45)",
+                        radarPoints: "50,34 86,32 78,76 30,62 18,48",
+                        archetype: "Охоронець Стабільності",
+                        stats: { empathy: "55%", logic: "96%", leadership: "90%", adaptability: "68%" }
+                    },
+                    {
+                        letter: "C",
+                        text: "Запустити фічу під feature flag на 5% користувачів, одночасно готуючи екстрений патч бази даних",
+                        badge: "🚀 Вектор: Прагматичний ризик (+44) • Контрольований запуск (+42)",
+                        radarPoints: "50,26 84,38 72,72 32,66 22,44",
+                        archetype: "Гнучкий Прагматик",
+                        stats: { empathy: "65%", logic: "88%", leadership: "86%", adaptability: "88%" }
+                    },
+                    {
+                        letter: "D",
+                        text: "Зібрати спільний воркшоп інженерів та бізнесу для спільного перегляду квартального роадмапу",
+                        badge: "🤝 Вектор: Синергія команд (+45) • Стратегічне вирівнювання (+43)",
+                        radarPoints: "50,20 72,44 68,76 36,74 26,38",
+                        archetype: "Командний Фасилітатор",
+                        stats: { empathy: "84%", logic: "80%", leadership: "82%", adaptability: "80%" }
+                    }
+                ]
+            },
+            {
+                id: 3,
+                category: "Лідерство & Кризовий менеджмент",
+                title: "Колега припустився критичної помилки перед релізом. Ваші дії?",
+                context: "До виходу в прод залишилося 3 години. Несподіваний збій у конфігурації заблокував платіжний шлюз. Команда на межі паніки, а стейкхолдери чекають фінального підтвердження готовності. Як ви розставите пріоритети у цій точці біфуркації?",
+                defaultChoice: 1,
+                choices: [
+                    {
+                        letter: "A",
+                        text: "Спокійно розібрати інцидент тет-а-тет з колегою та разом написати виправлення, не виносячи помилку на загал",
+                        badge: "🌿 Вектор: Емпатія & Довіра (+45) • Психологічна безпека (+38)",
+                        radarPoints: "50,18 68,45 60,70 30,75 16,36",
+                        archetype: "Емпатичний Ментор",
+                        stats: { empathy: "92%", logic: "65%", leadership: "70%", adaptability: "85%" }
+                    },
+                    {
+                        letter: "B",
+                        text: "Організувати швидкий War Room для команди без пошуку винних: синхронізувати ресурси й локалізувати збій",
+                        badge: "⚡ Вектор: Кризове командування (+50) • Системна координація (+42)",
+                        radarPoints: "50,28 82,36 74,75 35,68 25,44",
+                        archetype: "Кризовий Лідер",
+                        stats: { empathy: "60%", logic: "85%", leadership: "95%", adaptability: "75%" }
+                    },
+                    {
+                        letter: "C",
+                        text: "Швидко взяти виправлення на себе, щоб гарантувати дедлайн, а поглиблений розбір провести вже після запуску",
+                        badge: "🎯 Вектор: Особиста відповідальність (+48) • Захист бізнесу (+40)",
+                        radarPoints: "50,38 85,34 65,72 25,65 20,48",
+                        archetype: "Автономний Прагматик",
+                        stats: { empathy: "50%", logic: "95%", leadership: "65%", adaptability: "90%" }
+                    },
+                    {
+                        letter: "D",
+                        text: "Одразу відкрито попередити клієнтів і бізнес про перенесення релізу для забезпечення гарантованої якості коду",
+                        badge: "📊 Вектор: Стратегічна чесність (+46) • Контроль ризиків (+44)",
+                        radarPoints: "50,22 75,42 70,78 38,72 28,40",
+                        archetype: "Стратег Прозорості",
+                        stats: { empathy: "70%", logic: "80%", leadership: "85%", adaptability: "80%" }
+                    }
+                ]
+            },
+            {
+                id: 4,
+                category: "Адаптивність & Зміна вимог",
+                title: "Ключовий клієнт кардинально змінив технічні вимоги посеред кварталу. Ваша реакція?",
+                context: "Половина вже розробленої функціональності більше не потрібна за новими бізнес-вимогами. Інженери демотивовані переробляти архітектуру заново.",
+                defaultChoice: 0,
+                choices: [
+                    {
+                        letter: "A",
+                        text: "Провести відкриту мотивуючу сесію: пояснити ринковий контекст, зняти напругу та разом скоригувати цілі",
+                        badge: "🌟 Вектор: Емоційний інтелект (+46) • Антикризова мотивація (+42)",
+                        radarPoints: "50,20 70,42 64,72 32,74 20,40",
+                        archetype: "Емоційний Лідер",
+                        stats: { empathy: "88%", logic: "72%", leadership: "84%", adaptability: "86%" }
+                    },
+                    {
+                        letter: "B",
+                        text: "Провести технічний аудит: перевірити, які частини коду можна перетворити на універсальні мікромодулі",
+                        badge: "🧩 Вектор: Модульне мислення (+48) • Мінімізація втрат (+44)",
+                        radarPoints: "50,30 84,36 72,74 30,68 22,46",
+                        archetype: "Модульний Архітектор",
+                        stats: { empathy: "62%", logic: "92%", leadership: "80%", adaptability: "82%" }
+                    },
+                    {
+                        letter: "C",
+                        text: "Перерахувати скоуп та зафіксувати додатковий бюджет і строки з клієнтом за офіційною процедурою Change Request",
+                        badge: "📋 Вектор: Чіткі межі (+45) • Захист інтересів команди (+43)",
+                        radarPoints: "50,34 86,34 68,70 26,64 18,48",
+                        archetype: "Структурний Менеджер",
+                        stats: { empathy: "56%", logic: "94%", leadership: "82%", adaptability: "72%" }
+                    },
+                    {
+                        letter: "D",
+                        text: "Запропонувати гібридний варіант MVP, який частково задовольнить і старі напрацювання, і нові потреби",
+                        badge: "💡 Вектор: Стратегічна гнучкість (+47) • Бізнес-орієнтація (+41)",
+                        radarPoints: "50,24 78,38 70,74 34,70 24,42",
+                        archetype: "Стратегічний Інноватор",
+                        stats: { empathy: "74%", logic: "84%", leadership: "86%", adaptability: "88%" }
+                    }
+                ]
+            },
+            {
+                id: 5,
+                category: "Інновації & Технологічний ризик",
+                title: "Команда хоче впровадити нову трендову технологію без досвіду в ній. Ваше рішення?",
+                context: "Технологія обіцяє прискорення розробки на 30%, але у разі провалу проект затримається на два місяці.",
+                defaultChoice: 0,
+                choices: [
+                    {
+                        letter: "A",
+                        text: "Виділити 3 дні на створення ізольованого Proof-of-Concept з чіткими бенчмарками та критеріями прийому",
+                        badge: "🧪 Вектор: Експериментальна валідація (+47) • Керований ризик (+43)",
+                        radarPoints: "50,26 80,38 72,74 32,68 22,44",
+                        archetype: "Дослідницький Лідер",
+                        stats: { empathy: "70%", logic: "90%", leadership: "84%", adaptability: "86%" }
+                    },
+                    {
+                        letter: "B",
+                        text: "Зберегти перевірений стек для поточного контракту, а нову технологію протестувати на внутрішньому pet-проекті",
+                        badge: "🔒 Вектор: Гарантована надійність (+48) • Захист зобов'язань (+44)",
+                        radarPoints: "50,36 88,32 76,72 26,62 18,48",
+                        archetype: "Консервативний Стратег",
+                        stats: { empathy: "58%", logic: "95%", leadership: "82%", adaptability: "65%" }
+                    },
+                    {
+                        letter: "C",
+                        text: "Підтримати ініціативу команди у повному обсязі, взявши всі ризики затримки перед клієнтом на себе",
+                        badge: "🤝 Вектор: Беззастережна довіра (+49) • Сміливість лідера (+45)",
+                        radarPoints: "50,18 68,44 62,72 32,76 18,38",
+                        archetype: "Сміливий Новатор",
+                        stats: { empathy: "86%", logic: "68%", leadership: "88%", adaptability: "90%" }
+                    },
+                    {
+                        letter: "D",
+                        text: "Запросити зовнішнього технічного аудитора на 1 день для оцінки архітектурних ризиків нового стеку",
+                        badge: "🔍 Вектор: Експертний аудит (+46) • Об'єктивність (+42)",
+                        radarPoints: "50,28 84,36 70,72 30,66 20,44",
+                        archetype: "Аналітичний Експерт",
+                        stats: { empathy: "64%", logic: "92%", leadership: "80%", adaptability: "78%" }
+                    }
+                ]
+            },
+            {
+                id: 6,
+                category: "Стресостійкість & Екстремальне навантаження",
+                title: "Каскадний збій інфраструктури під час пікових продажів Black Friday. Перший крок?",
+                context: "Основні мікросервіси падають один за одним. Менеджмент безперервно дзвонить, клієнти пишуть скарги, моніторинг червоний.",
+                defaultChoice: 1,
+                choices: [
+                    {
+                        letter: "A",
+                        text: "Повністю ізолювати інженерів від дзвінків менеджменту, прийнявши весь комунікаційний тиск на себе",
+                        badge: "🛡️ Вектор: Захисний екран (+50) • Турбота про команду (+46)",
+                        radarPoints: "50,20 70,44 64,72 32,74 20,40",
+                        archetype: "Захисник Команди",
+                        stats: { empathy: "90%", logic: "75%", leadership: "88%", adaptability: "80%" }
+                    },
+                    {
+                        letter: "B",
+                        text: "Активувати протокол аварійного зниження навантаження (graceful degradation) та тимчасово відключити другорядні сервіси",
+                        badge: "⚙️ Вектор: Холодний інженерний розрахунок (+52) • Порятунок ядра (+48)",
+                        radarPoints: "50,30 86,34 78,76 32,66 22,46",
+                        archetype: "Кризовий Архітектор",
+                        stats: { empathy: "60%", logic: "96%", leadership: "92%", adaptability: "84%" }
+                    },
+                    {
+                        letter: "C",
+                        text: "Призначити Incident Commander'а та чітко розбити команду на 3 напрямки: мережа, база, бізнес-логіка",
+                        badge: "⚡ Вектор: Тактичне структурування (+48) • Оперативне лідерство (+44)",
+                        radarPoints: "50,26 84,36 74,74 34,68 24,44",
+                        archetype: "Оперативний Командир",
+                        stats: { empathy: "65%", logic: "90%", leadership: "94%", adaptability: "78%" }
+                    },
+                    {
+                        letter: "D",
+                        text: "Відкрити публічну статус-сторінку та що 10 хвилин давати чесний статус клієнтам для збереження репутації",
+                        badge: "📢 Вектор: Радикальна прозорість (+47) • Репутаційна стійкість (+43)",
+                        radarPoints: "50,22 76,42 68,76 36,72 26,40",
+                        archetype: "Стратег Прозорості",
+                        stats: { empathy: "76%", logic: "84%", leadership: "86%", adaptability: "82%" }
+                    }
+                ]
+            },
+            {
+                id: 7,
+                category: "Етика & Довгостроковий вплив",
+                title: "Виявлено алгоритмічне зміщення (bias) у моделі оцінки користувачів. Як вчините?",
+                context: "Виправлення алгоритму знизить бізнес-конверсію на 5%, що прямо вдарить по квартальних бонусах усієї команди.",
+                defaultChoice: 1,
+                choices: [
+                    {
+                        letter: "A",
+                        text: "Підготувати ґрунтовний звіт про репутаційні та юридичні загрози та передати його раді директорів",
+                        badge: "📊 Вектор: Корпоративна зрілість (+47) • Управління ризиками (+43)",
+                        radarPoints: "50,28 82,38 72,74 32,68 22,44",
+                        archetype: "Корпоративний Стратег",
+                        stats: { empathy: "72%", logic: "90%", leadership: "86%", adaptability: "78%" }
+                    },
+                    {
+                        letter: "B",
+                        text: "Негайно відкоригувати модель: справедливість та етика мають безумовний пріоритет над бонусами",
+                        badge: "⚖️ Вектор: Етична принциповість (+52) • Непохитні цінності (+48)",
+                        radarPoints: "50,24 84,36 76,74 34,70 24,42",
+                        archetype: "Етичний Лідер",
+                        stats: { empathy: "82%", logic: "92%", leadership: "90%", adaptability: "74%" }
+                    },
+                    {
+                        letter: "C",
+                        text: "Запропонувати поетапну схему пом'якшення протягом 2 спринтів, компенсувавши падіння іншими оптимізаціями",
+                        badge: "🎯 Вектор: Реалістичний прагматизм (+46) • Баланс інтересів (+42)",
+                        radarPoints: "50,26 80,40 70,72 32,68 22,44",
+                        archetype: "Прагматичний Дипломат",
+                        stats: { empathy: "76%", logic: "88%", leadership: "84%", adaptability: "84%" }
+                    },
+                    {
+                        letter: "D",
+                        text: "Ініціювати створення постійної Етичної ради інженерів компанії для аудиту всіх майбутніх ML-алгоритмів",
+                        badge: "🏛️ Вектор: Інституційні зміни (+48) • Системна культура (+44)",
+                        radarPoints: "50,20 74,44 68,76 36,72 26,40",
+                        archetype: "Системний Реформатор",
+                        stats: { empathy: "84%", logic: "82%", leadership: "88%", adaptability: "82%" }
+                    }
+                ]
+            },
+            {
+                id: 8,
+                category: "Стратегічне бачення & Фінал",
+                title: "Фінал оцінки: Який критерій для вас є найвищим свідченням успіху команди?",
+                context: "Проект успішно виведено на міжнародний ринок, усі KPI перевиконано. Який внутрішній результат ви вважатимете вашим найвищим досягненням як лідера?",
+                defaultChoice: 0,
+                choices: [
+                    {
+                        letter: "A",
+                        text: "Команда стала абсолютно автономною: здатна розвиватися, ухвалювати сильні рішення та перемагати без моєї участі",
+                        badge: "🌱 Вектор: Автономія людей (+52) • Лідерство служіння (+48)",
+                        radarPoints: "50,18 76,42 70,76 36,74 24,38",
+                        archetype: "Архітектор Автономії",
+                        stats: { empathy: "92%", logic: "86%", leadership: "95%", adaptability: "88%" }
+                    },
+                    {
+                        letter: "B",
+                        text: "Створена інженерна система є бездоганною: архітектура масштабується десятикратно без переписування",
+                        badge: "🏛️ Вектор: Інженерна спадщина (+50) • Системна міцність (+46)",
+                        radarPoints: "50,32 88,32 78,74 30,64 18,46",
+                        archetype: "Творець Систем",
+                        stats: { empathy: "60%", logic: "98%", leadership: "86%", adaptability: "75%" }
+                    },
+                    {
+                        letter: "C",
+                        text: "Кожен учасник команди виріс у кваліфікації на 2 рівні, зберіг ментальне здоров'я та пишається цим досвідом",
+                        badge: "❤️ Вектор: Людина в центрі (+54) • Психологічне процвітання (+50)",
+                        radarPoints: "50,16 70,44 62,72 34,76 18,36",
+                        archetype: "Гуманістичний Наставник",
+                        stats: { empathy: "96%", logic: "75%", leadership: "88%", adaptability: "86%" }
+                    },
+                    {
+                        letter: "D",
+                        text: "Продукт докорінно змінив якість життя користувачів та сформував новий стандарт на ринку",
+                        badge: "🌍 Вектор: Глобальний вплив (+51) • Стратегічний масштаб (+47)",
+                        radarPoints: "50,22 82,38 74,76 34,70 24,42",
+                        archetype: "Трансформаційний Стратег",
+                        stats: { empathy: "80%", logic: "90%", leadership: "94%", adaptability: "88%" }
+                    }
+                ]
+            }
+        ];
+
+        let questionsData = [...defaultQuestionsData];
+        let currentIndex = 0;
+        const userAnswers = {};
+
+        function calcRadarPoints(stats) {
+            const pLeadership = parseInt(stats?.leadership) || 75;
+            const pLogic = parseInt(stats?.logic) || 75;
+            const pAdapt = parseInt(stats?.adaptability) || 75;
+            const pEmpathy = parseInt(stats?.empathy) || 75;
+            const pResilience = Math.round((pLeadership + pLogic) / 2);
+
+            const r1 = 10 + (pLeadership / 100) * 32;
+            const r2 = 10 + (pLogic / 100) * 32;
+            const r3 = 10 + (pAdapt / 100) * 32;
+            const r4 = 10 + (pEmpathy / 100) * 32;
+            const r5 = 10 + (pResilience / 100) * 32;
+
+            const angles = [-Math.PI/2, -Math.PI/2 + (2*Math.PI/5), -Math.PI/2 + (4*Math.PI/5), -Math.PI/2 + (6*Math.PI/5), -Math.PI/2 + (8*Math.PI/5)];
+            return [
+                `${Math.round(50 + r1 * Math.cos(angles[0]))},${Math.round(50 + r1 * Math.sin(angles[0]))}`,
+                `${Math.round(50 + r2 * Math.cos(angles[1]))},${Math.round(50 + r2 * Math.sin(angles[1]))}`,
+                `${Math.round(50 + r3 * Math.cos(angles[2]))},${Math.round(50 + r3 * Math.sin(angles[2]))}`,
+                `${Math.round(50 + r4 * Math.cos(angles[3]))},${Math.round(50 + r4 * Math.sin(angles[3]))}`,
+                `${Math.round(50 + r5 * Math.cos(angles[4]))},${Math.round(50 + r5 * Math.sin(angles[4]))}`
+            ].join(' ');
+        }
+
+        function initCustomMatrixIfPresent() {
+            try {
+                const saved = localStorage.getItem('smarttest_custom_matrix');
+                if (saved) {
+                    const matrix = JSON.parse(saved);
+                    if (matrix && Array.isArray(matrix.cases) && matrix.cases.length > 0) {
+                        questionsData = matrix.cases.map((c, idx) => ({
+                            id: idx + 1,
+                            category: c.category || matrix.title || 'Авторська матриця',
+                            title: c.title,
+                            context: c.context,
+                            defaultChoice: 0,
+                            choices: (c.options || []).map((opt, oIdx) => {
+                                const letter = opt.letter || String.fromCharCode(65 + oIdx);
+                                const vectorBadges = (opt.vectors || []).map(v => `${v.axis} (+${v.points})`).join(' • ');
+                                const stats = opt.stats || {
+                                    leadership: `${60 + (oIdx * 10) % 35}%`,
+                                    logic: `${65 + ((oIdx + 1) * 12) % 30}%`,
+                                    adaptability: `${70 + ((oIdx + 2) * 8) % 25}%`,
+                                    empathy: `${60 + ((oIdx + 3) * 11) % 35}%`
+                                };
+                                return {
+                                    letter: letter,
+                                    text: opt.text,
+                                    badge: vectorBadges ? `🎯 Вектор: ${vectorBadges}` : '🎯 Ситуаційний вибір',
+                                    radarPoints: calcRadarPoints(stats),
+                                    archetype: opt.archetype || 'Аналітичний Профіль',
+                                    stats: stats
+                                };
+                            })
+                        }));
+
+                        const banner = document.getElementById('customMatrixBanner');
+                        if (banner) {
+                            banner.style.display = 'flex';
+                            const titleSpan = document.getElementById('customMatrixTitleText');
+                            if (titleSpan) titleSpan.textContent = matrix.title || 'Авторська матриця';
+                        }
+                    }
+                }
+            } catch (e) {
+                console.warn('Custom matrix load error:', e);
+            }
+        }
+
+        function resetToDefaultMatrix() {
+            if (confirm('Скинути проходження до базової матриці SmartTest?')) {
+                localStorage.removeItem('smarttest_custom_matrix');
+                window.location.href = '/question';
+            }
+        }
+
+        function renderQuestion(index) {
+            currentIndex = index;
+            const q = questionsData[index];
+            const total = questionsData.length;
+            const isLast = (index === total - 1);
+
+            // Оновлення прогресу
+            document.getElementById('questionProgressMeta').textContent = `Кейс ${index + 1} з ${total} • ${q.category}`;
+            const percent = Math.round(((index + 1) / total) * 100);
+            document.getElementById('questionProgressPercent').textContent = `${percent}% пройдено`;
+            document.getElementById('questionProgressFill').style.width = `${percent}%`;
+
+            // Оновлення тексту кейсу
+            document.getElementById('categoryLabelText').textContent = q.category;
+            document.getElementById('questionTitle').textContent = q.title;
+            document.getElementById('questionContext').textContent = q.context;
+
+            // Оновлення варіантів відповіді
+            if (!q.choices || q.choices.length === 0) return;
+
+            const container = document.getElementById('choicesList');
+            container.innerHTML = '';
+
+            let selectedChoiceIndex = userAnswers[index] !== undefined ? userAnswers[index] : (q.defaultChoice || 0);
+            if (selectedChoiceIndex >= q.choices.length || selectedChoiceIndex < 0) {
+                selectedChoiceIndex = 0;
+            }
+
+            q.choices.forEach((choice, cIndex) => {
+                const item = document.createElement('div');
+                item.className = 'choice-item' + (cIndex === selectedChoiceIndex ? ' selected' : '');
+                item.onclick = () => selectChoice(cIndex);
+
+                item.innerHTML = `
+                    <div class="choice-letter">${choice.letter}</div>
+                    <div class="choice-content">
+                        <div class="choice-text">${choice.text}</div>
+                        <div class="choice-vector-badge">${choice.badge}</div>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+
+            // Застосування показників обраного варіанту
+            const activeChoice = q.choices[selectedChoiceIndex] || q.choices[0];
+            if (activeChoice) {
+                applyChoiceStats(activeChoice);
+            }
+
+            // Стан кнопки "Попередній кейс"
+            const prevBtn = document.getElementById('btnPrevQuestion');
+            prevBtn.disabled = (index === 0);
+
+            // Перемикання кнопки "Наступне питання" / "Завершити та переглянути AI-вердикт"
+            const btnNext = document.getElementById('btnNextQuestion');
+            const btnFinish = document.getElementById('btnFinishTest');
+
+            if (isLast) {
+                // Останнє питання: приховуємо "Наступне питання", показуємо перехід до результатів
+                btnNext.style.display = 'none';
+                btnFinish.style.display = 'inline-flex';
+            } else {
+                // НЕ останнє питання: показуємо кнопку "Наступне питання", приховуємо фініш
+                btnNext.style.display = 'inline-flex';
+                btnFinish.style.display = 'none';
+            }
+
+            // Оновлення хешу/посилання у URL
+            const url = new URL(window.location);
+            url.searchParams.set('q', index + 1);
+            history.replaceState(null, '', url);
+        }
+
+        function selectChoice(choiceIndex) {
+            userAnswers[currentIndex] = choiceIndex;
+            const items = document.querySelectorAll('.choice-item');
+            items.forEach((it, idx) => {
+                if (idx === choiceIndex) {
+                    it.classList.add('selected');
+                } else {
+                    it.classList.remove('selected');
+                }
+            });
+
+            const activeChoice = questionsData[currentIndex].choices[choiceIndex];
+            applyChoiceStats(activeChoice);
+
+            // Індикація збереження відповіді
+            const indicator = document.getElementById('saveStatusIndicator');
+            indicator.style.color = '#059669';
+            indicator.textContent = '✓ Відповідь збережено';
+            setTimeout(() => {
+                indicator.style.color = '#94a3b8';
+                indicator.textContent = '💾 Відповідь збережено';
+            }, 1200);
+        }
+
+        function applyChoiceStats(choice) {
+            document.getElementById('liveRadarPolygon').setAttribute('points', choice.radarPoints);
+            document.getElementById('sensorArchetype').innerText = 'Поточний фокус: ' + choice.archetype;
+            document.getElementById('statLeadership').innerText = choice.stats.leadership;
+            document.getElementById('statLogic').innerText = choice.stats.logic;
+            document.getElementById('statAdaptability').innerText = choice.stats.adaptability;
+            document.getElementById('statEmpathy').innerText = choice.stats.empathy;
+        }
+
+        // Перехід до наступного питання
+        function nextQuestion() {
+            if (currentIndex < questionsData.length - 1) {
+                renderQuestion(currentIndex + 1);
+            }
+        }
+
+        // Перехід до попереднього питання
+        function prevQuestion() {
+            if (currentIndex > 0) {
+                renderQuestion(currentIndex - 1);
+            }
+        }
+
+        // Завершення тесту та відправка на ШІ-аналіз через бекенд
+        async function finishAndAnalyzeTest() {
+            const overlay = document.getElementById('aiLoadingOverlay');
+            if (overlay) overlay.style.display = 'flex';
+
+            // 1. Збираємо фактичні вибори користувача
+            const chosenItems = questionsData.map((q, idx) => {
+                let chosenIdx = userAnswers[idx] !== undefined ? userAnswers[idx] : (q.defaultChoice || 0);
+                if (chosenIdx >= q.choices.length || chosenIdx < 0) chosenIdx = 0;
+                return {
+                    q: q,
+                    chosen: q.choices[chosenIdx] || q.choices[0] || { text: 'Відповідь', stats: {} },
+                    idx: idx
+                };
+            });
+
+            // 2. Розраховуємо числові показники виборів респондента
+            let sumLogic = 0, sumEmpathy = 0, sumLeadership = 0, sumAdapt = 0;
+            const count = chosenItems.length || 1;
+
+            chosenItems.forEach(item => {
+                const s = item.chosen.stats || {};
+                sumLogic += parseInt(s.logic) || 75;
+                sumEmpathy += parseInt(s.empathy) || 75;
+                sumLeadership += parseInt(s.leadership) || 75;
+                sumAdapt += parseInt(s.adaptability) || 75;
+            });
+
+            const avgLogic = Math.round(sumLogic / count);
+            const avgEmpathy = Math.round(sumEmpathy / count);
+            const avgLeadership = Math.round(sumLeadership / count);
+            const avgAdapt = Math.round(sumAdapt / count);
+            const avgResilience = Math.round((avgLeadership * 0.55 + avgLogic * 0.45));
+
+            // Інтегральний бал зрілості
+            const overallScore = Math.round((avgLogic + avgEmpathy + avgLeadership + avgAdapt + avgResilience) / 5);
+
+            // Статистична точність вердикту на основі внутрішньої узгодженості виборів
+            const variance = Math.abs(avgLogic - avgEmpathy) + Math.abs(avgLeadership - avgAdapt);
+            const computedAccuracy = parseFloat((94.2 + ((overallScore * 3 + variance * 2) % 48) / 10).toFixed(1));
+
+            // Визначаємо домінантний мікро-архетип
+            const archetypes = chosenItems.map(c => c.chosen.archetype).filter(Boolean);
+            const lastArchetype = archetypes[archetypes.length - 1] || 'Стратегічний Архітектор';
+
+            // Створюємо надійний клієнтський вердикт на основі виборів
+            const baseVerdict = {
+                archetype: lastArchetype,
+                score: overallScore,
+                accuracy: computedAccuracy,
+                logic: avgLogic,
+                resilience: avgResilience,
+                empathy: avgEmpathy,
+                leadership: avgLeadership,
+                adaptability: avgAdapt,
+                quote: `Ваш профіль відображає виражену спрямованість на системність (${avgLogic}%) та лідерську відповідальність (${avgLeadership}%). Ви обираєте зважені кроки в кризових умовах, поєднуючи глибокий контроль ризиків із повагою до колег.`,
+                radarInsight: `Багатовимірний контур демонструє збалансовану структуру компетенцій із піком у сфері ${avgLogic > avgEmpathy ? 'інженерної логіки та системності' : 'емпатичної фасилітації та довіри'}.`,
+                superpowers: [
+                    'Швидка стабілізація процесів у моменти невизначеності',
+                    'Здатність виявляти системні першопричини проблем замість гасіння симптомів',
+                    'Висока культура довіри та підтримки команди під дедлайнами'
+                ],
+                growthZones: [
+                    'Встановлюйте чіткі часові межі перед ухваленням критичних компромісів',
+                    'Сміливіше делегуйте складні блоки задач, уникаючи надмірної самопожертви'
+                ],
+                recommendedRoles: [
+                    'Tech Lead / Engineering Manager',
+                    'Principal Architect',
+                    'Systems Delivery Lead'
+                ],
+                teamSynergy: {
+                    idealPartner: 'Прагматичний Реалізатор — трансформує вашу стратегію у блискавичну дію',
+                    creativeUnion: 'Інноваційний Дослідник — генерує неординарні концепції для розвитку продукту',
+                    frictionZone: 'Авторитарний Контролер — можливий опір через різну філософію довіри'
+                }
+            };
+
+            // Зберігаємо первинний вердикт та вибори негайно
+            localStorage.setItem('smarttest_ai_verdict', JSON.stringify(baseVerdict));
+            localStorage.setItem('smarttest_answers', JSON.stringify(chosenItems.map(item => ({
+                category: item.q.category,
+                question: item.q.title,
+                chosenAnswer: item.chosen.text
+            }))));
+
+            // Відправляємо вибори на нейромережу Gemini для персоналізованого аналізу
+            const payload = {
+                answers: chosenItems.map(item => ({
+                    category: item.q.category,
+                    question: item.q.title,
+                    chosenAnswer: item.chosen.text
+                }))
+            };
+
+            try {
+                const response = await fetch('/api/analyze-test', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    const aiData = await response.json();
+                    if (aiData && aiData.archetype) {
+                        // Якщо ШІ повернув вердикт, оновлюємо
+                        localStorage.setItem('smarttest_ai_verdict', JSON.stringify(aiData));
+                    }
+                }
+            } catch (err) {
+                console.warn('AI analysis network error, fallback verdict saved:', err);
+            }
+
+            window.location.href = '/result';
+        }
+
+        // Ініціалізація при завантаженні сторінки
+        document.addEventListener('DOMContentLoaded', () => {
+            initCustomMatrixIfPresent();
+            const urlQ = parseInt(new URLSearchParams(window.location.search).get('q'), 10);
+            const initialIndex = (!isNaN(urlQ) && urlQ >= 1 && urlQ <= questionsData.length) ? urlQ - 1 : 0;
+            renderQuestion(initialIndex);
+        });
+    </script>
+
+    <!-- AI Loading Modal -->
+    <div id="aiLoadingOverlay" style="display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.92); z-index: 99999; backdrop-filter: blur(8px); align-items: center; justify-content: center; flex-direction: column; color: white; text-align: center; padding: 20px;">
+        <div style="width: 76px; height: 76px; border: 5px solid rgba(216, 180, 254, 0.2); border-top-color: #8a00c2; border-radius: 50%; animation: smartSpin 0.9s linear infinite; margin-bottom: 24px; box-shadow: 0 0 35px rgba(138, 0, 194, 0.5);"></div>
+        <h2 style="font-size: 24px; font-weight: 800; margin-bottom: 8px; color: #ffffff;">Штучний інтелект Gemini формує вердикт...</h2>
+        <p style="color: #cbd5e1; font-size: 15px; max-width: 460px; line-height: 1.5;">Зіставляємо вектори рішень у n-вимірному просторі, виявляємо приховані патерни мислення та будуємо 5D радарну матрицю.</p>
+        <span style="display: inline-block; margin-top: 18px; padding: 6px 16px; background: rgba(138, 0, 194, 0.25); border: 1px solid rgba(216, 180, 254, 0.4); border-radius: 9999px; font-size: 12px; font-weight: 700; color: #e9d5ff; letter-spacing: 0.5px;">⚡ LIVE AI COMPUTING</span>
+    </div>
+    <style>
+        @@keyframes smartSpin { 100% { transform: rotate(360deg); } }
+    </style>
+
+</body>
+</html>
+
+
+

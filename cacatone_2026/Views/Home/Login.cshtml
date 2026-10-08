@@ -1,0 +1,418 @@
+@* 
+    SmartTest — Сторінка входу та реєстрації користувача
+    Чистий Razor (.cshtml) + CSS
+*@
+@{
+    Layout = null;
+    ViewData["Title"] = "SmartTest — Вхід та реєстрація";
+}
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <meta name="description" content="Вхід до особистого кабінету SmartTest та реєстрація нових авторів матриць профілювання." />
+
+    <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Стилі -->
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/style.css" />
+</head>
+<body style="background-color: #f8f9fa; min-height: 100vh; display: flex; flex-direction: column;">
+
+    <!-- Спрощена верхня панель із поверненням на головну -->
+    <header style="background: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 16px 0;">
+        <div class="container" style="max-width: 1080px; display: flex; justify-content: space-between; align-items: center;">
+            <a href="/" class="logo">
+                <div class="logo-icon-box">
+                    <div class="logo-icon-inner">
+                        <svg class="logo-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 4.5a2.5 2.5 0 0 0-4.96-.46 2.5 2.5 0 0 0-1.98 3 2.5 2.5 0 0 0-1.32 4.24 3 3 0 0 0 .34 5.58 2.5 2.5 0 0 0 2.96 3.08A2.5 2.5 0 0 0 12 19.5a2.5 2.5 0 0 0 4.96.46 2.5 2.5 0 0 0 1.98-3 2.5 2.5 0 0 0 1.32-4.24 3 3 0 0 0-.34-5.58 2.5 2.5 0 0 0-2.96-3.08A2.5 2.5 0 0 0 12 4.5z"></path>
+                        </svg>
+                        <span class="logo-dot"></span>
+                    </div>
+                </div>
+                <div class="logo-text-group">
+                    <span class="logo-title">Smart<span class="text-accent">Test</span></span>
+                    <span class="logo-subtitle">Платформа багатовимірного AI-профілювання</span>
+                </div>
+            </a>
+
+            <a href="/" class="btn-secondary-cta" style="padding: 8px 16px; font-size: 13px; text-decoration: none;">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                <span>На головну</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- Основна секція аутентифікації -->
+    <main style="flex-grow: 1; display: flex; align-items: center; justify-content: center; padding: 40px 16px 60px;">
+        <div style="width: 100%; max-width: 980px; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 28px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); overflow: hidden; display: flex; flex-wrap: wrap;">
+            
+            <!-- ЛІВА КОЛОНКА: Брендовий промо-блок платформи -->
+            <div style="flex: 1 1 400px; background: linear-gradient(145deg, #fbf2ff 0%, #faf5ff 100%); border-right: 1px solid #f1f5f9; padding: 48px 40px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;">
+                <!-- Декоративні фонові кола -->
+                <div style="position: absolute; width: 260px; height: 260px; border-radius: 9999px; background: rgba(138, 0, 194, 0.05); top: -80px; right: -80px; pointer-events: none;"></div>
+                <div style="position: absolute; width: 180px; height: 180px; border-radius: 9999px; background: rgba(138, 0, 194, 0.04); bottom: -40px; left: -40px; pointer-events: none;"></div>
+
+                <div>
+                    <div style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: #ffffff; border: 1px solid #e4b6ff; border-radius: 9999px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(138,0,194,0.06);">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8a00c2" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                        </svg>
+                        <span style="font-size: 11px; font-weight: 800; color: #8a00c2; text-transform: uppercase; letter-spacing: 0.6px;">AI-ПРОФІЛЮВАННЯ</span>
+                    </div>
+
+                    <h2 style="font-size: 26px; font-weight: 900; color: #0f172a; line-height: 1.3; margin-bottom: 14px; letter-spacing: -0.5px;">
+                        Оцінюйте потенціал <br />без правильних і хибних відповідей
+                    </h2>
+
+                    <p style="font-size: 14px; color: #64748b; line-height: 1.6; margin-bottom: 28px;">
+                        Наша платформа аналізує комбінації рішень, виявляє приховані патерни поведінки та генерує розгорнуті радарні портрети особистості.
+                    </p>
+
+                    <!-- Міні-прев'ю картка вердикту -->
+                    <div style="background: #ffffff; border: 1.5px solid rgba(138,0,194,0.15); border-radius: 18px; padding: 20px; box-shadow: 0 4px 18px rgba(138,0,194,0.06); margin-bottom: 24px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #8a00c2;">Зразок AI-вердикту</span>
+                            <span style="font-size: 11px; font-weight: 700; color: #059669; background: #ecfdf5; padding: 2px 8px; border-radius: 9999px;">94% зрілість</span>
+                        </div>
+                        <div style="font-size: 16px; font-weight: 800; color: #0f172a; margin-bottom: 4px;">Дипломатичний Архітектор</div>
+                        <div style="font-size: 12px; color: #64748b; margin-bottom: 12px;">Емпатія 88% • Логіка 94% • Кризове лідерство 86%</div>
+                        <!-- Прогрес індикатор -->
+                        <div style="width: 100%; height: 6px; background: #f1f5f9; border-radius: 9999px; overflow: hidden;">
+                            <div style="width: 88%; height: 100%; background: linear-gradient(90deg, #8a00c2 0%, #b23bf2 100%); border-radius: 9999px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Пункти переваг -->
+                    <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px; color: #334155; font-weight: 600;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="color: #059669; font-size: 14px;">✓</span>
+                            <span>Створення власних n-вимірних матриць тестування</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="color: #059669; font-size: 14px;">✓</span>
+                            <span>Збереження та синхронізація чернеток</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="color: #059669; font-size: 14px;">✓</span>
+                            <span>Аналітика архетипів команд у реальному часі</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="font-size: 12px; color: #94a3b8; padding-top: 24px; border-top: 1px solid rgba(138,0,194,0.1);">
+                    Понад 500+ лідерів команд уже використовують SmartTest
+                </div>
+            </div>
+
+            <!-- ПРАВА КОЛОНКА: Інтерактивна форма входу / реєстрації -->
+            <div style="flex: 1 1 450px; padding: 48px 44px; display: flex; flex-direction: column; justify-content: center;">
+                
+                <!-- Перемикач режимів (Вхід / Реєстрація) -->
+                <div style="background: #f1f5f9; border-radius: 12px; padding: 4px; display: flex; margin-bottom: 28px;">
+                    <button type="button" id="tabAuthLogin" onclick="switchAuthMode('login')" style="flex: 1; padding: 10px 14px; border-radius: 10px; border: none; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; background: #ffffff; color: #0f172a; box-shadow: 0 2px 6px rgba(0,0,0,0.06);">
+                        Увійти
+                    </button>
+                    <button type="button" id="tabAuthRegister" onclick="switchAuthMode('register')" style="flex: 1; padding: 10px 14px; border-radius: 10px; border: none; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; background: transparent; color: #64748b;">
+                        Реєстрація
+                    </button>
+                </div>
+
+                <!-- Заголовок форми -->
+                <div style="margin-bottom: 24px;">
+                    <h2 id="authHeading" style="font-size: 24px; font-weight: 800; color: #0f172a; margin-bottom: 6px;">
+                        Вхід до кабінету
+                    </h2>
+                    <p id="authSubheading" style="font-size: 14px; color: #64748b; margin: 0;">
+                        Введіть ваш нікнейм та пароль для доступу до матриць.
+                    </p>
+                </div>
+
+                <!-- Форма аутентифікації -->
+                <form id="authForm" onsubmit="handleAuthSubmit(event)">
+                    
+                    <!-- 1. Поле: Електронна пошта (ТІЛЬКИ ДЛЯ РЕЄСТРАЦІЇ) -->
+                    <div id="groupEmail" style="display: none; margin-bottom: 18px; transition: all 0.3s ease;">
+                        <label for="inputEmail" style="display: block; font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 6px;">
+                            Електронна пошта <span style="color: #e11d48;">*</span>
+                        </label>
+                        <div style="position: relative;">
+                            <input 
+                                type="email" 
+                                id="inputEmail" 
+                                placeholder="alex@company.com" 
+                                style="width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 14px; color: #0f172a; outline: none; transition: all 0.2s; font-family: inherit; box-sizing: border-box;"
+                                onfocus="this.style.borderColor='#8a00c2'; this.style.boxShadow='0 0 0 3px rgba(138,0,194,0.1)'"
+                                onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- 2. Поле: Нікнейм / Логін (ВХІД І РЕЄСТРАЦІЯ) -->
+                    <div style="margin-bottom: 18px;">
+                        <label for="inputNickname" style="display: block; font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 6px;">
+                            <span id="labelNickname">Нікнейм або логін</span> <span style="color: #e11d48;">*</span>
+                        </label>
+                        <div style="position: relative;">
+                            <input 
+                                type="text" 
+                                id="inputNickname" 
+                                required 
+                                value="ivan_lead" 
+                                placeholder="наприклад: ivan_lead" 
+                                style="width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 14px; color: #0f172a; outline: none; transition: all 0.2s; font-family: inherit; box-sizing: border-box;"
+                                onfocus="this.style.borderColor='#8a00c2'; this.style.boxShadow='0 0 0 3px rgba(138,0,194,0.1)'"
+                                onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- 3. Поле: Пароль (ВХІД І РЕЄСТРАЦІЯ) -->
+                    <div style="margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                            <label for="inputPassword" style="font-size: 13px; font-weight: 700; color: #0f172a;">
+                                Пароль <span style="color: #e11d48;">*</span>
+                            </label>
+                            <a href="#" id="linkForgotPassword" onclick="alert('Посилання для скидання пароля надіслано на вашу пошту'); return false;" style="font-size: 12px; font-weight: 600; color: #8a00c2; text-decoration: none;">
+                                Забули пароль?
+                            </a>
+                        </div>
+                        <div style="position: relative;">
+                            <input 
+                                type="password" 
+                                id="inputPassword" 
+                                required 
+                                value="password123" 
+                                placeholder="Введіть ваш пароль" 
+                                style="width: 100%; padding: 12px 42px 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 14px; color: #0f172a; outline: none; transition: all 0.2s; font-family: inherit; box-sizing: border-box;"
+                                onfocus="this.style.borderColor='#8a00c2'; this.style.boxShadow='0 0 0 3px rgba(138,0,194,0.1)'"
+                                onblur="this.style.borderColor='#e2e8f0'; this.style.boxShadow='none'"
+                            />
+                            <!-- Кнопка показати/сховати пароль -->
+                            <button 
+                                type="button" 
+                                onclick="togglePasswordVisibility()" 
+                                style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #94a3b8; display: flex; align-items: center; padding: 4px;"
+                                title="Показати/сховати пароль"
+                            >
+                                <svg id="eyeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Опція: Умови використання (ТІЛЬКИ ДЛЯ РЕЄСТРАЦІЇ) -->
+                    <div id="groupTerms" style="display: none; margin-bottom: 20px;">
+                        <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: #64748b; cursor: pointer;">
+                            <input type="checkbox" id="termsCheckbox" style="margin-top: 3px; accent-color: #8a00c2;" />
+                            <span>Я погоджуюся з <a href="#" style="color: #8a00c2; text-decoration: none; font-weight: 600;">Умовами використання</a> та <a href="#" style="color: #8a00c2; text-decoration: none; font-weight: 600;">Політикою конфіденційності</a></span>
+                        </label>
+                    </div>
+
+                    <!-- Головна кнопка дії -->
+                    <button type="submit" id="btnSubmitAuth" class="btn-primary-cta" style="width: 100%; padding: 14px; font-size: 15px; justify-content: center; border-radius: 12px; cursor: pointer; margin-bottom: 20px;">
+                        <span id="btnSubmitText">Увійти в акаунт -></span>
+                    </button>
+
+                </form>
+
+                <!-- Розділювач -->
+                <div style="display: flex; align-items: center; margin: 10px 0 20px; color: #94a3b8; font-size: 12px; font-weight: 600;">
+                    <div style="flex-grow: 1; height: 1px; background: #e2e8f0;"></div>
+                    <span style="padding: 0 12px; text-transform: uppercase; letter-spacing: 0.5px;">або продовжити через</span>
+                    <div style="flex-grow: 1; height: 1px; background: #e2e8f0;"></div>
+                </div>
+
+                <!-- Кнопки швидкого входу (Google / GitHub) -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px;">
+                    <button type="button" onclick="socialLogin('Google')" style="display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 14px; border: 1.5px solid #e2e8f0; border-radius: 12px; background: #ffffff; color: #0f172a; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#ffffff'">
+                        <!-- Google SVG -->
+                        <svg width="18" height="18" viewBox="0 0 24 24">
+                            <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.66v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.15z"/>
+                            <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+                            <path fill="#FBBC05" d="M5.28 14.27A7.17 7.17 0 0 1 4.9 12c0-.79.14-1.57.38-2.27V6.58H1.25A11.96 11.96 0 0 0 0 12c0 1.92.45 3.74 1.25 5.42l4.03-3.15z"/>
+                            <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+                        </svg>
+                        <span>Google</span>
+                    </button>
+
+                    <button type="button" onclick="socialLogin('GitHub')" style="display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 14px; border: 1.5px solid #e2e8f0; border-radius: 12px; background: #ffffff; color: #0f172a; font-size: 13px; font-weight: 700; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#ffffff'">
+                        <!-- GitHub SVG -->
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+                        </svg>
+                        <span>GitHub</span>
+                    </button>
+                </div>
+
+                <!-- Нижнє посилання перемикання -->
+                <div style="text-align: center; font-size: 13px; color: #64748b;">
+                    <span id="authSwitchPrompt">Ще не маєте акаунту?</span>
+                    <a href="#" id="authSwitchLink" onclick="toggleAuthMode(); return false;" style="color: #8a00c2; font-weight: 700; text-decoration: none; margin-left: 4px;">
+                        Зареєструватися
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer style="background: #ffffff; border-top: 1px solid #e2e8f0; padding: 20px 0; margin-top: auto;">
+        <div class="container" style="max-width: 1080px; text-align: center; font-size: 13px; color: #94a3b8;">
+            © 2026 SmartTest AI Profiling. Всі права захищені.
+        </div>
+    </footer>
+
+    <!-- Логіка перемикання Вхід / Реєстрація -->
+    <script>
+        let currentMode = 'login'; // 'login' або 'register'
+
+        function switchAuthMode(mode) {
+            currentMode = mode;
+            const tabLogin = document.getElementById('tabAuthLogin');
+            const tabRegister = document.getElementById('tabAuthRegister');
+            const heading = document.getElementById('authHeading');
+            const subheading = document.getElementById('authSubheading');
+            const groupEmail = document.getElementById('groupEmail');
+            const inputEmail = document.getElementById('inputEmail');
+            const labelNickname = document.getElementById('labelNickname');
+            const linkForgot = document.getElementById('linkForgotPassword');
+            const groupTerms = document.getElementById('groupTerms');
+            const btnSubmitText = document.getElementById('btnSubmitText');
+            const switchPrompt = document.getElementById('authSwitchPrompt');
+            const switchLink = document.getElementById('authSwitchLink');
+
+            if (mode === 'register') {
+                // Стилі перемикача
+                tabRegister.style.background = '#ffffff';
+                tabRegister.style.color = '#0f172a';
+                tabRegister.style.boxShadow = '0 2px 6px rgba(0,0,0,0.06)';
+                tabLogin.style.background = 'transparent';
+                tabLogin.style.color = '#64748b';
+                tabLogin.style.boxShadow = 'none';
+
+                // Заголовки
+                heading.textContent = 'Створіть свій профіль';
+                subheading.textContent = 'Введіть електронну пошту, нікнейм та пароль для старту.';
+
+                // Поля
+                groupEmail.style.display = 'block';
+                inputEmail.required = true;
+                labelNickname.textContent = 'Ваш нікнейм (псевдонім)';
+                linkForgot.style.display = 'none';
+                groupTerms.style.display = 'block';
+
+                // Кнопка
+                btnSubmitText.textContent = 'Зареєструватися ->';
+                switchPrompt.textContent = 'Вже зареєстровані на платформі?';
+                switchLink.textContent = 'Увійти';
+
+                history.replaceState(null, null, '#register');
+            } else {
+                // Стилі перемикача
+                tabLogin.style.background = '#ffffff';
+                tabLogin.style.color = '#0f172a';
+                tabLogin.style.boxShadow = '0 2px 6px rgba(0,0,0,0.06)';
+                tabRegister.style.background = 'transparent';
+                tabRegister.style.color = '#64748b';
+                tabRegister.style.boxShadow = 'none';
+
+                // Заголовки
+                heading.textContent = 'Вхід до кабінету';
+                subheading.textContent = 'Введіть ваш нікнейм та пароль для доступу до матриць.';
+
+                // Поля
+                groupEmail.style.display = 'none';
+                inputEmail.required = false;
+                labelNickname.textContent = 'Нікнейм або логін';
+                linkForgot.style.display = 'inline';
+                groupTerms.style.display = 'none';
+
+                // Кнопка
+                btnSubmitText.textContent = 'Увійти в акаунт ->';
+                switchPrompt.textContent = 'Ще не маєте акаунту?';
+                switchLink.textContent = 'Зареєструватися';
+
+                history.replaceState(null, null, '#login');
+            }
+        }
+
+        function toggleAuthMode() {
+            switchAuthMode(currentMode === 'login' ? 'register' : 'login');
+        }
+
+        function togglePasswordVisibility() {
+            const pwdInput = document.getElementById('inputPassword');
+            const eyeIcon = document.getElementById('eyeIcon');
+            if (pwdInput.type === 'password') {
+                pwdInput.type = 'text';
+                eyeIcon.innerHTML = `
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                `;
+            } else {
+                pwdInput.type = 'password';
+                eyeIcon.innerHTML = `
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                `;
+            }
+        }
+
+        function handleAuthSubmit(e) {
+            e.preventDefault();
+            const nick = document.getElementById('inputNickname').value.trim();
+            const email = document.getElementById('inputEmail').value.trim();
+
+            if (currentMode === 'register') {
+                const terms = document.getElementById('termsCheckbox');
+                if (!terms.checked) {
+                    alert('Будь ласка, підтвердіть згоду з умовами платформи.');
+                    return;
+                }
+                localStorage.setItem('smarttest_user', JSON.stringify({ nickname: nick, email: email, isLoggedIn: true }));
+                alert(`🎉 Вітаємо, @@${nick}! Ваш акаунт успішно створено. Переходимо до кабінету.`);
+            } else {
+                localStorage.setItem('smarttest_user', JSON.stringify({ nickname: nick, isLoggedIn: true }));
+                alert(`👋 Раді бачити вас знову, @@${nick}! Вхід успішний.`);
+            }
+
+            window.location.href = '/drafts';
+        }
+
+        function socialLogin(provider) {
+            const nick = provider === 'Google' ? 'google_user' : 'github_dev';
+            localStorage.setItem('smarttest_user', JSON.stringify({ nickname: nick, provider: provider, isLoggedIn: true }));
+            alert(`Успішний вхід через ${provider}! Переходимо до кабінету.`);
+            window.location.href = '/drafts';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.location.hash === '#register' || window.location.search.includes('mode=register')) {
+                switchAuthMode('register');
+            } else {
+                switchAuthMode('login');
+            }
+        });
+    </script>
+
+</body>
+</html>
+
+
+

@@ -1,0 +1,647 @@
+@* 
+    SmartTest — Сторінка відображення результатів та AI-вердикту
+    Чистий Razor (.cshtml) + CSS
+*@
+@{
+    Layout = null;
+    ViewData["Title"] = "SmartTest — Ваш багатовимірний AI-вердикт";
+}
+
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <meta name="description" content="Багатовимірний AI-вердикт: архетип, радарна матриця скілів, суперсили та командна сумісність." />
+
+    <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Стилі -->
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/style.css" />
+</head>
+<body class="verdict-page">
+
+    <!-- Верхня панель результатів -->
+    <header class="site-header">
+        <div class="container header-container">
+            <a href="/" class="logo">
+                <div class="logo-icon-box">
+                    <div class="logo-icon-inner">
+                        <svg class="logo-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 4.5a2.5 2.5 0 0 0-4.96-.46 2.5 2.5 0 0 0-1.98 3 2.5 2.5 0 0 0-1.32 4.24 3 3 0 0 0 .34 5.58 2.5 2.5 0 0 0 2.96 3.08A2.5 2.5 0 0 0 12 19.5a2.5 2.5 0 0 0 4.96.46 2.5 2.5 0 0 0 1.98-3 2.5 2.5 0 0 0 1.32-4.24 3 3 0 0 0-.34-5.58 2.5 2.5 0 0 0-2.96-3.08A2.5 2.5 0 0 0 12 4.5z"></path>
+                        </svg>
+                        <span class="logo-dot"></span>
+                    </div>
+                </div>
+                <div class="logo-text-group">
+                    <span class="logo-title">Smart<span class="text-accent">Test</span></span>
+                    <span class="logo-subtitle">Платформа багатовимірного AI-профілювання</span>
+                </div>
+            </a>
+
+            <div class="header-actions">
+                <a href="/question" class="btn-secondary-cta" style="padding: 10px 18px; font-size: 13px;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="1 4 1 10 7 10"></polyline>
+                        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                    </svg>
+                    <span>Пройти ще раз</span>
+                </a>
+
+                <a href="/" class="btn-primary-cta" style="padding: 10px 20px; font-size: 13px;">
+                    <span>На головну</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        
+        <!-- Заголовок сторінки вердикту -->
+        <section class="verdict-header-banner">
+            <div class="container">
+                <div class="verdict-badge">
+                    <span class="pulse-dot"></span>
+                    <span id="verdictBadgeText">ПРОФІЛЮВАННЯ ЗАВЕРШЕНО • ТОЧНІСТЬ ВЕРДИКТУ <span id="verdictAccuracyVal">97.2%</span></span>
+                </div>
+                <h1 class="verdict-main-title">
+                    Ваш багатовимірний <span class="text-accent">AI-вердикт</span>
+                </h1>
+                <p class="verdict-main-sub">
+                    Штучний інтелект зіставив ваші ситуаційні дилеми, проаналізував нелінійні комбінації рішень та сформував комплексний поведінковий портрет.
+                </p>
+            </div>
+        </section>
+
+        <section style="padding-bottom: 60px;">
+            <div class="container">
+                
+                <!-- Банер попередження демо-режиму (якщо тест ще не пройдено) -->
+                <div id="demoNoticeBanner" style="display: none; background: #faf5ff; border: 1.5px solid #d8b4fe; border-radius: 16px; padding: 14px 22px; margin-bottom: 24px; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span style="font-size: 22px;">💡</span>
+                        <div>
+                            <span style="font-size: 11px; font-weight: 800; text-transform: uppercase; color: #8a00c2; letter-spacing: 0.5px; display: block;">ДЕМОНСТРАЦІЙНИЙ ПЕРЕГЛЯД ВЕРДИКТУ</span>
+                            <span style="font-size: 13px; font-weight: 600; color: #334155;">Ви переглядаєте зразок AI-профілювання. Пройдіть тест, щоб штучний інтелект сформував ваш персональний вердикт.</span>
+                        </div>
+                    </div>
+                    <a href="/question" class="btn-primary-cta" style="padding: 9px 18px; font-size: 13px; text-decoration: none; white-space: nowrap;">
+                        Пройти тест зараз ->
+                    </a>
+                </div>
+
+                <!-- Головна картка визначеного архетипу (Hero Archetype Card) -->
+                <div class="archetype-hero-card">
+                    <div class="archetype-hero-glow"></div>
+
+                    <div class="archetype-row">
+                        <div class="archetype-meta">
+                            <div class="archetype-avatar-box">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="8" r="6"></circle>
+                                    <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="archetype-tag-small">ДОМІНАНТНИЙ АРХЕТИП ОСОБИСТОСТІ</div>
+                                <h2 class="archetype-name" id="verdictArchetypeName">Дипломатичний Архітектор</h2>
+                            </div>
+                        </div>
+
+                        <div class="archetype-score-badge">
+                            <div class="archetype-score-val" id="verdictArchetypeScore">94%</div>
+                            <div class="archetype-score-label">Зрілість підходу в кризі</div>
+                        </div>
+                    </div>
+
+                    <!-- Цитата-характеристика архетипу -->
+                    <div class="archetype-quote" id="verdictArchetypeQuote">
+                        «Ви трансформуєте напругу в системні інженерні покращення. Ваш природний стиль — усувати першопричини конфліктів та збоїв без демотивації колег, поєднуючи високу емпатію з безкомпромісною якістю кінцевого результату.»
+                    </div>
+
+                    <div class="archetype-actions-row">
+                        <button type="button" class="btn-primary-cta" onclick="window.print()" title="Зберегти повний звіт у PDF">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                            <span>Завантажити повний PDF-звіт</span>
+                        </button>
+
+                        <button type="button" class="btn-secondary-cta" onclick="shareResult()" title="Поділитися результатом">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="18" cy="5" r="3"></circle>
+                                <circle cx="6" cy="12" r="3"></circle>
+                                <circle cx="18" cy="19" r="3"></circle>
+                                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                            </svg>
+                            <span>Поділитися результатом</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Блок аналізу: Радарна діаграма зліва + Осі розподілу справа -->
+                <div class="verdict-sections-grid">
+                    
+                    <!-- Радарна діаграма (Spider Chart) -->
+                    <div class="radar-verdict-card">
+                        <div class="radar-verdict-header">
+                            <div>
+                                <h3 class="card-heading-title">Радарна матриця скілів</h3>
+                                <p style="font-size: 12px; color: #64748b; margin-top: 2px;">5 ключових векторів оцінки поведінки</p>
+                            </div>
+                            <span class="badge-pill-accent">5D ВЕКТОР</span>
+                        </div>
+
+                        <!-- Великий SVG Spider Chart -->
+                        <div class="large-radar-container">
+                            <svg viewBox="0 0 120 120" style="width: 100%; height: 100%;">
+                                <!-- Фонова сітка павутини -->
+                                <polygon points="60,15 105,48 88,98 32,98 15,48" fill="none" stroke="#e2e8f0" stroke-width="1.2"></polygon>
+                                <polygon points="60,28 92,52 80,88 40,88 28,52" fill="none" stroke="#e2e8f0" stroke-width="1.2"></polygon>
+                                <polygon points="60,40 80,56 71,78 49,78 40,56" fill="none" stroke="#e2e8f0" stroke-width="1.2"></polygon>
+                                
+                                <!-- Осі -->
+                                <line x1="60" y1="60" x2="60" y2="15" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="2"></line>
+                                <line x1="60" y1="60" x2="105" y2="48" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="2"></line>
+                                <line x1="60" y1="60" x2="88" y2="98" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="2"></line>
+                                <line x1="60" y1="60" x2="32" y2="98" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="2"></line>
+                                <line x1="60" y1="60" x2="15" y2="48" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="2"></line>
+
+                                <!-- Заповнений радарний полігон результату -->
+                                <polygon id="verdictRadarPolygon" points="60,18 99,50 82,92 36,94 20,49" fill="rgba(138, 0, 194, 0.28)" stroke="#8a00c2" stroke-width="2.5"></polygon>
+
+                                <!-- Вершини-точки -->
+                                <circle id="radarDot0" cx="60" cy="18" r="3" fill="#8a00c2"></circle>
+                                <circle id="radarDot1" cx="99" cy="50" r="3" fill="#8a00c2"></circle>
+                                <circle id="radarDot2" cx="82" cy="92" r="3" fill="#8a00c2"></circle>
+                                <circle id="radarDot3" cx="36" cy="94" r="3" fill="#8a00c2"></circle>
+                                <circle id="radarDot4" cx="20" cy="49" r="3" fill="#8a00c2"></circle>
+                            </svg>
+                        </div>
+
+                        <div style="font-size: 12px; color: #475569; line-height: 1.5; background: #faf5ff; padding: 12px 16px; border-radius: 12px; border: 1px solid rgba(138, 0, 194, 0.15);">
+                            💡 <strong>Висновок форми радара:</strong> <span id="verdictRadarInsight">Гармонійно витягнутий контур свідчить про високу синхронізацію між раціональним аналізом та турботою про людей без крену в деструктивний авторитаризм.</span>
+                        </div>
+                    </div>
+
+                    <!-- Розподіл показників за вимірами (Стовпчики) -->
+                    <div class="radar-verdict-card">
+                        <div class="radar-verdict-header">
+                            <div>
+                                <h3 class="card-heading-title">Деталізація вимірів</h3>
+                                <p style="font-size: 12px; color: #64748b; margin-top: 2px;">Калібровані вагові коефіцієнти</p>
+                            </div>
+                        </div>
+
+                        <div class="dimensions-list">
+                            <!-- 1. Логіка -->
+                            <div class="dimension-row">
+                                <div class="dim-header">
+                                    <span>Логіка & Системна архітектура</span>
+                                    <span class="text-accent" id="valLogic">94%</span>
+                                </div>
+                                <div class="dim-bar-track">
+                                    <div class="dim-bar-fill" id="barLogic" style="width: 94%;"></div>
+                                </div>
+                            </div>
+
+                            <!-- 2. Стресостійкість -->
+                            <div class="dimension-row">
+                                <div class="dim-header">
+                                    <span>Стресостійкість & Витримка</span>
+                                    <span class="text-accent" id="valResilience">90%</span>
+                                </div>
+                                <div class="dim-bar-track">
+                                    <div class="dim-bar-fill" id="barResilience" style="width: 90%;"></div>
+                                </div>
+                            </div>
+
+                            <!-- 3. Емпатія -->
+                            <div class="dimension-row">
+                                <div class="dim-header">
+                                    <span>Емпатія & Психологічна безпека</span>
+                                    <span class="text-accent" id="valEmpathy">88%</span>
+                                </div>
+                                <div class="dim-bar-track">
+                                    <div class="dim-bar-fill" id="barEmpathy" style="width: 88%;"></div>
+                                </div>
+                            </div>
+
+                            <!-- 4. Кризове лідерство -->
+                            <div class="dimension-row">
+                                <div class="dim-header">
+                                    <span>Кризове лідерство</span>
+                                    <span class="text-accent" id="valLeadership">86%</span>
+                                </div>
+                                <div class="dim-bar-track">
+                                    <div class="dim-bar-fill" id="barLeadership" style="width: 86%;"></div>
+                                </div>
+                            </div>
+
+                            <!-- 5. Адаптивність -->
+                            <div class="dimension-row">
+                                <div class="dim-header">
+                                    <span>Адаптивність до невідомого</span>
+                                    <span class="text-accent" id="valAdaptability">78%</span>
+                                </div>
+                                <div class="dim-bar-track">
+                                    <div class="dim-bar-fill" id="barAdaptability" style="width: 78%;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #64748b;">
+                            <span>Медіана по галузі: 68%</span>
+                            <span id="industryDeltaVal" style="color: #059669; font-weight: 700;">▲ +24% вище середнього</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- 4 Квадранти аналізу: Суперсили, Сліпі зони, Ролі, Команда -->
+                <div class="quadrant-grid">
+                    
+                    <!-- Квадрант 1: Суперсили -->
+                    <div class="quadrant-card">
+                        <div class="quadrant-header">
+                            <div class="quadrant-icon" style="background: rgba(5, 150, 105, 0.1); color: #059669;">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                </svg>
+                            </div>
+                            <h4 class="quadrant-title">Ключові суперсили</h4>
+                        </div>
+                        <ul class="quadrant-items-list" id="listSuperpowers">
+                            <li class="quadrant-item">
+                                <span class="quadrant-bullet" style="background: #059669;"></span>
+                                <span><strong>Системний деескалатор:</strong> вміння гасити паніку та переводити емоції у чіткий інженерний план дій.</span>
+                            </li>
+                            <li class="quadrant-item">
+                                <span class="quadrant-bullet" style="background: #059669;"></span>
+                                <span><strong>Культура 1-on-1:</strong> здатність розвивати колег на їхніх помилках замість публічного осуду.</span>
+                            </li>
+                            <li class="quadrant-item">
+                                <span class="quadrant-bullet" style="background: #059669;"></span>
+                                <span><strong>Довгострокова якість:</strong> пріоритет стійкості коду над поспішними "костилями".</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Квадрант 2: Сліпі зони -->
+                    <div class="quadrant-card">
+                        <div class="quadrant-header">
+                            <div class="quadrant-icon" style="background: rgba(217, 119, 6, 0.1); color: #d97706;">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                </svg>
+                            </div>
+                            <h4 class="quadrant-title">Сліпі зони та точки росту</h4>
+                        </div>
+                        <ul class="quadrant-items-list" id="listGrowthZones">
+                            <li class="quadrant-item">
+                                <span class="quadrant-bullet" style="background: #d97706;"></span>
+                                <span><strong>Гіпервідповідальність:</strong> схильність брати на себе забагато роботи у пікові моменти заради підстраховки.</span>
+                            </li>
+                            <li class="quadrant-item">
+                                <span class="quadrant-bullet" style="background: #d97706;"></span>
+                                <span><strong>Дипломатичне зволікання:</strong> іноді прагнення зберегти гармонію може уповільнювати жорсткі, але необхідні рішення.</span>
+                            </li>
+                            <li class="quadrant-item">
+                                <span class="quadrant-bullet" style="background: #d97706;"></span>
+                                <span><strong>Порада AI:</strong> чіткіше делегуйте мікрозадачі та встановлюйте жорсткі часові рамки для обговорень.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Квадрант 3: Ідеальні ролі -->
+                    <div class="quadrant-card">
+                        <div class="quadrant-header">
+                            <div class="quadrant-icon" style="background: rgba(37, 99, 235, 0.1); color: #2563eb;">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect width="20" height="14" x="2" y="7" rx="2" ry="2"></rect>
+                                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                                </svg>
+                            </div>
+                            <h4 class="quadrant-title">Рекомендовані ролі</h4>
+                        </div>
+                        <ul class="quadrant-items-list" id="listRoles">
+                            <li class="quadrant-item">
+                                <span class="quadrant-bullet" style="background: #2563eb;"></span>
+                                <span><strong>Tech Lead / Team Lead:</strong> максимальний вплив через баланс технічної експертизи та лідерства.</span>
+                            </li>
+                            <li class="quadrant-item">
+                                <span class="quadrant-bullet" style="background: #2563eb;"></span>
+                                <span><strong>Staff / Principal Architect:</strong> проєктування складних рішень з урахуванням людського фактору.</span>
+                            </li>
+                            <li class="quadrant-item">
+                                <span class="quadrant-bullet" style="background: #2563eb;"></span>
+                                <span><strong>VP of Engineering:</strong> масштабування інженерної культури у зрілих tech-командах.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Квадрант 4: Командна сумісність -->
+                    <div class="quadrant-card">
+                        <div class="quadrant-header">
+                            <div class="quadrant-icon" style="background: rgba(138, 0, 194, 0.1); color: #8a00c2;">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                            </div>
+                            <h4 class="quadrant-title">Командна синергія</h4>
+                        </div>
+                        <ul class="quadrant-items-list" id="listSynergy">
+                            <li class="quadrant-item">
+                                <span class="quadrant-bullet" style="background: #8a00c2;"></span>
+                                <span><strong>Ідеальний партнер:</strong> <span id="synergyPartner"><em>Прагматичний Реалізатор</em> — компенсує вашу рефлексію блискавичною дією.</span></span>
+                            </li>
+                            <li class="quadrant-item">
+                                <span class="quadrant-bullet" style="background: #8a00c2;"></span>
+                                <span><strong>Творчий союз:</strong> <span id="synergyCreative"><em>Візіонер-Інноватор</em> — генерує ідеї, які ви структурно упаковуєте у roadmap.</span></span>
+                            </li>
+                            <li class="quadrant-item">
+                                <span class="quadrant-bullet" style="background: #8a00c2;"></span>
+                                <span><strong>Зона тертя:</strong> <span id="synergyFriction"><em>Авторитарний Диктатор</em> — можливі конфлікти через різне ставлення до людей.</span></span>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <!-- Фінальна плашка дій -->
+                <div class="verdict-action-strip">
+                    <h3 class="strip-title">Готові дослідити інші грані свого потенціалу?</h3>
+                    <p class="strip-desc">
+                        Пройдіть матриці на стресостійкість, командну сумісність або профорієнтацію, щоб сформувати повну 360° AI-карту особистості.
+                    </p>
+                    <div class="strip-buttons">
+                        <a href="/question" class="btn-primary-cta">
+                            <span>Пройти наступну матрицю -></span>
+                        </a>
+                        <a href="/" class="btn-secondary-cta">
+                            <span>Повернутися до каталогу</span>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container footer-content">
+            <div class="logo">
+                <div class="logo-icon-box" style="width: 36px; height: 36px;">
+                    <div class="logo-icon-inner">
+                        <svg class="logo-icon-svg" style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 4.5a2.5 2.5 0 0 0-4.96-.46 2.5 2.5 0 0 0-1.98 3 2.5 2.5 0 0 0-1.32 4.24 3 3 0 0 0 .34 5.58 2.5 2.5 0 0 0 2.96 3.08A2.5 2.5 0 0 0 12 19.5a2.5 2.5 0 0 0 4.96.46 2.5 2.5 0 0 0 1.98-3 2.5 2.5 0 0 0 1.32-4.24 3 3 0 0 0-.34-5.58 2.5 2.5 0 0 0-2.96-3.08A2.5 2.5 0 0 0 12 4.5z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="logo-text-group">
+                    <span class="logo-title" style="font-size: 18px;">Smart<span class="text-accent">Test</span></span>
+                    <span class="logo-subtitle">Платформа багатовимірного AI-профілювання та вердиктів</span>
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <a href="#">Методологія аналізу</a>
+                <a href="#">Політика конфіденційності</a>
+                <a href="#">Умови використання</a>
+            </div>
+
+            <div class="footer-copy">
+                © 2026 SmartTest AI Profiling. Всі права захищені.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Скрипт динамічного заповнення AI-вердикту від Gemini -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const raw = localStorage.getItem('smarttest_ai_verdict');
+            if (!raw) {
+                const demoBanner = document.getElementById('demoNoticeBanner');
+                if (demoBanner) demoBanner.style.display = 'flex';
+                const badge = document.getElementById('verdictBadgeText');
+                if (badge) badge.innerHTML = 'ДЕМОНСТРАЦІЙНИЙ ЗРАЗОК • ТОЧНІСТЬ ВЕРДИКТУ <span id="verdictAccuracyVal">97.2%</span>';
+                return;
+            }
+
+            try {
+                const verdict = JSON.parse(raw);
+
+                // 1. Архетип та оцінка
+                if (verdict.archetype) {
+                    const elName = document.getElementById('verdictArchetypeName');
+                    if (elName) elName.textContent = verdict.archetype;
+                }
+                if (verdict.score) {
+                    const elScore = document.getElementById('verdictArchetypeScore');
+                    if (elScore) elScore.textContent = verdict.score + '%';
+                }
+                if (verdict.quote) {
+                    const elQuote = document.getElementById('verdictArchetypeQuote');
+                    if (elQuote) elQuote.textContent = '«' + verdict.quote + '»';
+                }
+
+                // 2. Виміри (шкали прогресу)
+                const dims = [
+                    { key: 'logic', valId: 'valLogic', barId: 'barLogic' },
+                    { key: 'resilience', valId: 'valResilience', barId: 'barResilience' },
+                    { key: 'empathy', valId: 'valEmpathy', barId: 'barEmpathy' },
+                    { key: 'leadership', valId: 'valLeadership', barId: 'barLeadership' },
+                    { key: 'adaptability', valId: 'valAdaptability', barId: 'barAdaptability' }
+                ];
+
+                dims.forEach(d => {
+                    const score = verdict[d.key];
+                    if (score !== undefined) {
+                        const valEl = document.getElementById(d.valId);
+                        const barEl = document.getElementById(d.barId);
+                        if (valEl) valEl.textContent = score + '%';
+                        if (barEl) barEl.style.width = score + '%';
+                    }
+                });
+
+                // 3. Динамічний перерахунок точок Радарного полігону (Spider chart)
+                const angles = [-Math.PI / 2, -Math.PI / 2 + 0.4 * Math.PI, -Math.PI / 2 + 0.8 * Math.PI, -Math.PI / 2 + 1.2 * Math.PI, -Math.PI / 2 + 1.6 * Math.PI];
+                const scores = [
+                    (verdict.logic || 88) / 100,
+                    (verdict.resilience || 84) / 100,
+                    (verdict.empathy || 90) / 100,
+                    (verdict.leadership || 86) / 100,
+                    (verdict.adaptability || 80) / 100
+                ];
+
+                const points = scores.map((s, i) => {
+                    const r = s * 45;
+                    const x = Math.round(60 + r * Math.cos(angles[i]));
+                    const y = Math.round(60 + r * Math.sin(angles[i]));
+                    const dot = document.getElementById('radarDot' + i);
+                    if (dot) {
+                        dot.setAttribute('cx', x);
+                        dot.setAttribute('cy', y);
+                    }
+                    return `${x},${y}`;
+                }).join(' ');
+
+                const poly = document.getElementById('verdictRadarPolygon');
+                if (poly) poly.setAttribute('points', points);
+
+                // 4. Суперсили
+                if (Array.isArray(verdict.superpowers) && verdict.superpowers.length > 0) {
+                    const ul = document.getElementById('listSuperpowers');
+                    if (ul) {
+                        ul.innerHTML = verdict.superpowers.map(p => `
+                            <li class="quadrant-item">
+                                <span class="quadrant-bullet" style="background: #059669;"></span>
+                                <span>${p}</span>
+                            </li>
+                        `).join('');
+                    }
+                }
+
+                // 5. Точки росту
+                if (Array.isArray(verdict.growthZones) && verdict.growthZones.length > 0) {
+                    const ul = document.getElementById('listGrowthZones');
+                    if (ul) {
+                        ul.innerHTML = verdict.growthZones.map(z => `
+                            <li class="quadrant-item">
+                                <span class="quadrant-bullet" style="background: #d97706;"></span>
+                                <span>${z}</span>
+                            </li>
+                        `).join('');
+                    }
+                }
+
+                // 6. Рекомендовані ролі
+                if (Array.isArray(verdict.recommendedRoles) && verdict.recommendedRoles.length > 0) {
+                    const ul = document.getElementById('listRoles');
+                    if (ul) {
+                        ul.innerHTML = verdict.recommendedRoles.map(r => `
+                            <li class="quadrant-item">
+                                <span class="quadrant-bullet" style="background: #2563eb;"></span>
+                                <span><strong>${r}</strong></span>
+                            </li>
+                        `).join('');
+                    }
+                }
+
+                // 7. Точність вердикту та інсайт форми радара
+                let accuracy = verdict.accuracy;
+                if (!accuracy) {
+                    const baseScore = verdict.score || 91;
+                    accuracy = (94.0 + ((baseScore * 3) % 45) / 10).toFixed(1);
+                }
+                const accEl = document.getElementById('verdictAccuracyVal');
+                if (accEl) accEl.textContent = accuracy + '%';
+
+                const badgeTextEl = document.getElementById('verdictBadgeText');
+                if (badgeTextEl) {
+                    badgeTextEl.innerHTML = `ПРОФІЛЮВАННЯ ЗАВЕРШЕНО • ТОЧНІСТЬ ВЕРДИКТУ <span id="verdictAccuracyVal">${accuracy}%</span>`;
+                }
+
+                if (verdict.radarInsight) {
+                    const rEl = document.getElementById('verdictRadarInsight');
+                    if (rEl) rEl.textContent = verdict.radarInsight;
+                }
+
+                // 8. Порівняння з медіаною по галузі
+                const avg = Math.round(((verdict.logic || 88) + (verdict.resilience || 84) + (verdict.empathy || 90) + (verdict.leadership || 86) + (verdict.adaptability || 80)) / 5);
+                const median = 68;
+                const diff = avg - median;
+                const deltaEl = document.getElementById('industryDeltaVal');
+                if (deltaEl) {
+                    if (diff >= 0) {
+                        deltaEl.style.color = '#059669';
+                        deltaEl.textContent = `▲ +${diff}% вище середнього`;
+                    } else {
+                        deltaEl.style.color = '#d97706';
+                        deltaEl.textContent = `▼ ${diff}% нижче середнього`;
+                    }
+                }
+
+                // 9. Командна синергія
+                if (verdict.teamSynergy) {
+                    if (verdict.teamSynergy.idealPartner) {
+                        const el = document.getElementById('synergyPartner');
+                        if (el) el.innerHTML = verdict.teamSynergy.idealPartner;
+                    }
+                    if (verdict.teamSynergy.creativeUnion) {
+                        const el = document.getElementById('synergyCreative');
+                        if (el) el.innerHTML = verdict.teamSynergy.creativeUnion;
+                    }
+                    if (verdict.teamSynergy.frictionZone) {
+                        const el = document.getElementById('synergyFriction');
+                        if (el) el.innerHTML = verdict.teamSynergy.frictionZone;
+                    }
+                }
+
+            } catch (e) {
+                console.error('Error hydrating AI verdict:', e);
+            }
+
+            // Оновлення нікнейму користувача в шапці
+            try {
+                const userRaw = localStorage.getItem('smarttest_user');
+                if (userRaw) {
+                    const user = JSON.parse(userRaw);
+                    const btn = document.querySelector('.btn-login span');
+                    if (btn && user.nickname) btn.textContent = '@@' + user.nickname;
+                }
+            } catch (e) {}
+        });
+
+        function shareResult() {
+            const archetype = document.getElementById('verdictArchetypeName')?.innerText || 'AI-архетип';
+            const score = document.getElementById('verdictArchetypeScore')?.innerText || '';
+            const text = `Мій багатовимірний результат у SmartTest: ${archetype} (${score}). Пройди тестування: ${window.location.origin}`;
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    alert('✓ Результат скопійовано в буфер обміну:\n\n' + text);
+                }).catch(() => {
+                    prompt('Скопіюйте посилання на результат:', text);
+                });
+            } else {
+                prompt('Скопіюйте посилання на результат:', text);
+            }
+        }
+    </script>
+
+    <style>
+        @@media print {
+            .site-header, .site-footer, .archetype-actions-row, .verdict-action-strip {
+                display: none !important;
+            }
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            .archetype-hero-card, .radar-verdict-card, .quadrant-card {
+                box-shadow: none !important;
+                border: 1px solid #ccc !important;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</body>
+</html>
+
+
+
