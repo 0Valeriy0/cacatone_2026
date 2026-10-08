@@ -6,7 +6,7 @@
 [![ASP.NET Core](https://img.shields.io/badge/ASP.NET_Core-MVC-5C2D91?style=for-the-badge&logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/apps/aspnet)
 [![Google Gemini API](https://img.shields.io/badge/Google_Gemini-3.5_Flash-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/)
 [![C#](https://img.shields.io/badge/C%23-14-239120?style=for-the-badge&logo=c-sharp&logoColor=white)](https://docs.microsoft.com/en-us/dotnet/csharp/)
-[![Hackathon 2026](https://img.shields.io/badge/Hackathon-2026_Project-FF5722?style=for-the-badge)](https://github.com/)
+[![Kakaton 2026](https://img.shields.io/badge/Hackathon-2026_Project-FF5722?style=for-the-badge)](https://github.com/)
 
 **Інтелектуальна платформа нелінійного психометричного профілювання та генерації ситуаційних дилем на базі Google Gemini AI.**
 
