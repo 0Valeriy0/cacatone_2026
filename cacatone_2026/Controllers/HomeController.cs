@@ -31,8 +31,8 @@ namespace cacatone_2026.Controllers
         [HttpGet("test-ai")]
         public async Task<IActionResult> TestAi()
         {
-            return Ok();
-            /*            // 1. Характеристики, які перевіряємо
+    
+                        // 1. Характеристики, які перевіряємо
                         var characteristics = new List<string>
                          {
                     "Лідерство",
@@ -57,7 +57,7 @@ namespace cacatone_2026.Controllers
                         };
                         // 3. Викликаємо наш новий метод
                         string result = await _geminiClient.AnalyzeSelectedAnswerAsync(question, characteristics);
-                        return Content(result, "text/plain; charset=utf-8");*/
+                        return Content(result, "text/plain; charset=utf-8");
         }
     }
 }
