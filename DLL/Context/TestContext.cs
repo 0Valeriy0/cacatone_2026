@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Domain.Models;
 namespace DLL.Context
 {
-    public class Context : DbContext
+    public class TestContext : DbContext
     {
-        public Context(DbContextOptions<Context> options) : base(options)
+        public TestContext(DbContextOptions<TestContext> options) : base(options)
         {
         }
         public DbSet<Answer> Answers { get; set; }
