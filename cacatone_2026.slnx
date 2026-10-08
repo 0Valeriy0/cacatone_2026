@@ -1,3 +1,6 @@
 <Solution>
+  <Project Path="BLL/BLL.csproj" Id="cf75e793-238c-4d96-a8fd-f4c57714c511" />
   <Project Path="cacatone_2026/cacatone_2026.csproj" />
+  <Project Path="DLL/DLL.csproj" Id="2e64cda1-ecb7-475a-bb2a-0c355f01dee1" />
+  <Project Path="Domain/Domain.csproj" Id="b0ead5f3-fd51-4fe5-bc2c-04de93e1c911" />
 </Solution>
