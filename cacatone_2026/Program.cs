@@ -1,3 +1,7 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -12,7 +16,7 @@ if (!app.Environment.IsDevelopment())
 }
 app.UseRouting();
 
-app.UseAuthorization();
+app.UseAuthorization();     
 
 app.MapStaticAssets();
 app.MapControllers();

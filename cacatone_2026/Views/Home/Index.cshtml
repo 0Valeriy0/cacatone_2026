@@ -1,8 +1,436 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <meta name="description" content="Платформа багатовимірного AI-профілювання. Немає правильних відповідей: аналіз комбінацій рішень, радарна матриця скілів та персоналізовані AI-вердикти." />
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+    <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Підключення стилів -->
+    <link rel="stylesheet" href="~/style.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/style.css" />
+</head>
+<body>
+
+    <!-- Верхня інформаційна панель -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <span class="badge-pill-accent">Нова парадигма</span>
+            <span>Оцінювання нового покоління: від лінійних тестів до багатовимірних AI-вердиктів.</span>
+            <a href="#hero-cta" class="top-bar-link">
+                Спробувати матрицю
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+            </a>
+        </div>
+    </div>
+
+    <!-- 1. Header (Шапка сайту) -->
+    <header class="site-header">
+        <div class="container header-container">
+
+            <!-- Зліва: Логотип "SmartTest" з іконкою (#8a00c2) та підписом -->
+            <a href="#" class="logo">
+                <div class="logo-icon-box">
+                    <div class="logo-icon-inner">
+                        <!-- Іконка нейромережі / мізку -->
+                        <svg class="logo-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 4.5a2.5 2.5 0 0 0-4.96-.46 2.5 2.5 0 0 0-1.98 3 2.5 2.5 0 0 0-1.32 4.24 3 3 0 0 0 .34 5.58 2.5 2.5 0 0 0 2.96 3.08A2.5 2.5 0 0 0 12 19.5a2.5 2.5 0 0 0 4.96.46 2.5 2.5 0 0 0 1.98-3 2.5 2.5 0 0 0 1.32-4.24 3 3 0 0 0-.34-5.58 2.5 2.5 0 0 0-2.96-3.08A2.5 2.5 0 0 0 12 4.5z"></path>
+                            <path d="M16 8h.01"></path>
+                            <path d="M8 8h.01"></path>
+                            <path d="M12 12h.01"></path>
+                            <path d="M16 16h.01"></path>
+                            <path d="M8 16h.01"></path>
+                        </svg>
+                        <span class="logo-dot"></span>
+                    </div>
+                </div>
+                <div class="logo-text-group">
+                    <span class="logo-title">Smart<span class="text-accent">Test</span></span>
+                    <span class="logo-subtitle">Платформа багатовимірного AI-профілювання</span>
+                </div>
+            </a>
+
+            <!-- По центру: Навігаційне меню (Головна активна з товстою фіолетовою лінією #8a00c2 знизу) -->
+            <nav class="nav-menu">
+                <a href="#hero" class="nav-link active">Головна</a>
+                <a href="#directions" class="nav-link">Напрямки</a>
+                <a href="#matrices" class="nav-link">Матриці</a>
+                <a href="#verdicts" class="nav-link">
+                    AI-вердикти
+                </a>
+                <a href="#methodology" class="nav-link">Про платформу</a>
+            </nav>
+
+            <!-- Справа: Поле пошуку + кнопка "Увійти" -->
+            <div class="header-actions">
+                <div class="search-box">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" class="search-input" placeholder="Пошук матриць..." />
+                </div>
+
+                <!-- Суцільна кнопка "Увійти" з іконкою профілю (#8a00c2, білий текст) -->
+                <button type="button" class="btn-login" onclick="alert('Форма входу до особистого кабінету SmartTest')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span>Увійти</span>
+                </button>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+
+        <!-- 2. Hero Section (Головний блок) -->
+        <section id="hero" class="hero-section">
+            <div class="container">
+                <div class="hero-grid">
+
+                    <!-- Ліва колонка (Текст та CTA) -->
+                    <div class="hero-content">
+
+                        <!-- Бейдж (tag) з іконкою мізку/нейромережі та текстом "НЕМАЄ ПРАВИЛЬНИХ ВІДПОВІДЕЙ" -->
+                        <div class="hero-tag">
+                            <svg class="hero-tag-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 4.5a2.5 2.5 0 0 0-4.96-.46 2.5 2.5 0 0 0-1.98 3 2.5 2.5 0 0 0-1.32 4.24 3 3 0 0 0 .34 5.58 2.5 2.5 0 0 0 2.96 3.08A2.5 2.5 0 0 0 12 19.5a2.5 2.5 0 0 0 4.96.46 2.5 2.5 0 0 0 1.98-3 2.5 2.5 0 0 0 1.32-4.24 3 3 0 0 0-.34-5.58 2.5 2.5 0 0 0-2.96-3.08A2.5 2.5 0 0 0 12 4.5z"></path>
+                            </svg>
+                            <span>НЕМАЄ ПРАВИЛЬНИХ ВІДПОВІДЕЙ</span>
+                        </div>
+
+                        <!-- Великий заголовок (H1) -->
+                        <h1 class="hero-title">
+                            Дізнайся свій справжній потенціал —
+                            <span class="hero-title-highlight">
+                                отримай багатовимірний AI-вердикт!
+                                <svg class="hero-wave-svg" viewBox="0 0 300 12" fill="none" preserveAspectRatio="none">
+                                    <path d="M1 9C50 2 100 12 150 6C200 1 250 11 299 4" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+                                </svg>
+                            </span>
+                        </h1>
+
+                        <!-- Підзаголовок (сірий текст) -->
+                        <p class="hero-subtitle">
+                            Забудь про лінійні бали. Наша система аналізує комбінації твоїх рішень, знаходить приховані патерни та генерує розгорнутий психологічний і професійний портрет за допомогою штучного інтелекту.
+                        </p>
+
+                        <!-- Кнопки (в один ряд) -->
+                        <div id="hero-cta" class="hero-buttons">
+                            <!-- Primary кнопка: "Пройти профілювання ->" (#8a00c2, білий текст) -->
+                            <button type="button" class="btn-primary-cta" onclick="alert('Розпочинаємо профілювання: аналіз ситуаційного вибору')">
+                                <span>Пройти профілювання</span>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </button>
+
+                            <!-- Secondary кнопка: "Створити матрицю тесту ->" (світло-фіолетовий фон, #8a00c2) -->
+                            <button type="button" class="btn-secondary-cta" onclick="alert('Конструктор матриці: визначення вимірів та осей')">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="6" y1="3" x2="6" y2="15"></line>
+                                    <circle cx="18" cy="6" r="3"></circle>
+                                    <circle cx="6" cy="18" r="3"></circle>
+                                    <path d="M18 9a9 9 0 0 1-9 9"></path>
+                                </svg>
+                                <span>Створити матрицю тесту</span>
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <!-- Під кнопками: три маленькі пункти з іконками (з елементами фіолетового #8a00c2) -->
+                        <div class="hero-features">
+
+                            <!-- 1. Векторна оцінка ваг -->
+                            <div class="feature-item">
+                                <div class="feature-icon-box">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                    </svg>
+                                </div>
+                                <div class="feature-text-group">
+                                    <span class="feature-title">Векторна оцінка ваг</span>
+                                    <span class="feature-desc">n-вимірний простір</span>
+                                </div>
+                            </div>
+
+                            <!-- 2. Аналіз суперечностей -->
+                            <div class="feature-item">
+                                <div class="feature-icon-box">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="16 3 21 3 21 8"></polyline>
+                                        <line x1="4" y1="20" x2="21" y2="3"></line>
+                                        <polyline points="21 16 21 21 16 21"></polyline>
+                                        <line x1="15" y1="15" x2="21" y2="21"></line>
+                                        <line x1="4" y1="4" x2="9" y2="9"></line>
+                                    </svg>
+                                </div>
+                                <div class="feature-text-group">
+                                    <span class="feature-title">Аналіз суперечностей</span>
+                                    <span class="feature-desc">виявлення патернів</span>
+                                </div>
+                            </div>
+
+                            <!-- 3. Глибокий експертний висновок -->
+                            <div class="feature-item">
+                                <div class="feature-icon-box">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+                                    </svg>
+                                </div>
+                                <div class="feature-text-group">
+                                    <span class="feature-title">Глибокий висновок</span>
+                                    <span class="feature-desc">персональний вердикт</span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Права колонка (3D ілюстрація) -->
+                    <div class="hero-illustration-wrapper">
+                        <div class="hero-glow-backdrop"></div>
+
+                        <div class="illustration-card">
+                            <div class="illustration-inner">
+                                <!-- 3D Render Image: Ноутбук зі спайдер-чартом (Емпатія, Логіка, Лідерство, Адаптивність), робот, голографічний вердикт -->
+                                <img src="hero-illustration.jpg"
+                                     asp-append-version="true"
+                                     alt="3D ілюстрація: ноутбук із радарною спайдер-діаграмою скілів, ситуаційною дилемою та роботом із голографічним AI-вердиктом"
+                                     class="illustration-img" />
+
+                                <!-- Верхній плаваючий бейдж (AI-вердикт) -->
+                                <div class="floating-badge-top">
+                                    <div class="badge-icon-square">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="8" r="6"></circle>
+                                            <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div class="badge-text-title">AI-вердикт: Інноватор</div>
+                                        <div class="badge-text-sub">
+                                            <span class="pulse-dot"></span>
+                                            96% стійкість до ризиків
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Нижній плаваючий бейдж (Радарна матриця скілів LIVE) -->
+                                <div class="floating-badge-bottom">
+                                    <div class="badge-icon-circle">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <div class="badge-text-title">Радарна матриця скілів</div>
+                                        <div style="font-size: 10px; color: #64748b; font-weight: 500;">Емпатія • Логіка • Лідерство</div>
+                                    </div>
+                                    <span class="tag-live">LIVE</span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Section "Популярні напрямки аналізу" (Напрямки профілювання) -->
+        <section id="directions" class="directions-section">
+            <div class="container">
+
+                <!-- Заголовок секції та посилання справа "Всі матриці ->" (#8a00c2) -->
+                <div class="section-header-row">
+                    <div>
+                        <div class="section-pretitle">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+                            </svg>
+                            <span>Багатовимірні вектори оцінки</span>
+                        </div>
+                        <h2 class="section-title">Популярні напрямки аналізу</h2>
+                    </div>
+
+                    <a href="#all-matrices" class="view-all-link">
+                        <span>Всі матриці</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                </div>
+
+                <!-- Сітка з 5 карток категорій в один ряд -->
+                <div class="directions-grid">
+
+                    <!-- 1. Софт-скіли (Пастельний блакитний) -->
+                    <div class="direction-card card-soft-skills" onclick="alert('Напрямок: Софт-скіли')">
+                        <div>
+                            <div class="card-icon-box">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="card-title">Софт-скіли</h3>
+                            <p class="card-description">Емпатія, тактовність, вирішення суперечок та емоційний інтелект</p>
+                        </div>
+                        <div class="card-arrow-row">
+                            <div class="card-arrow-circle">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Лідерський потенціал (Пастельний бурштиновий) -->
+                    <div class="direction-card card-leadership" onclick="alert('Напрямок: Лідерський потенціал')">
+                        <div>
+                            <div class="card-icon-box">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="m2 4 3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14"></path>
+                                </svg>
+                            </div>
+                            <h3 class="card-title">Лідерський потенціал</h3>
+                            <p class="card-description">Прийняття рішень у кризі, стратегічне бачення та мотивація інших</p>
+                        </div>
+                        <div class="card-arrow-row">
+                            <div class="card-arrow-circle">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Профорієнтація (Пастельний зелений) -->
+                    <div class="direction-card card-career" onclick="alert('Напрямок: Профорієнтація')">
+                        <div>
+                            <div class="card-icon-box">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <circle cx="12" cy="12" r="6"></circle>
+                                    <circle cx="12" cy="12" r="2"></circle>
+                                </svg>
+                            </div>
+                            <h3 class="card-title">Профорієнтація</h3>
+                            <p class="card-description">Матчинг ролей, аналіз природних схильностей та прихованих талантів</p>
+                        </div>
+                        <div class="card-arrow-row">
+                            <div class="card-arrow-circle">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Командна сумісність (Пастельний фіолетовий #8a00c2) -->
+                    <div class="direction-card card-team" onclick="alert('Напрямок: Командна сумісність')">
+                        <div>
+                            <div class="card-icon-box">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                            </div>
+                            <h3 class="card-title">Командна сумісність</h3>
+                            <p class="card-description">Ролі за Белбіном, взаємодія у крос-функціональних командах</p>
+                        </div>
+                        <div class="card-arrow-row">
+                            <div class="card-arrow-circle">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5. Стресостійкість (Пастельний рожевий) -->
+                    <div class="direction-card card-resilience" onclick="alert('Напрямок: Стресостійкість')">
+                        <div>
+                            <div class="card-icon-box">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                    <path d="m9 12 2 2 4-4"></path>
+                                </svg>
+                            </div>
+                            <h3 class="card-title">Стресостійкість</h3>
+                            <p class="card-description">Поведінка під тиском жорстких дедлайнів та адаптивність до змін</p>
+                        </div>
+                        <div class="card-arrow-row">
+                            <div class="card-arrow-circle">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                                    <polyline points="12 5 19 12 12 19"></polyline>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container footer-content">
+            <div class="logo">
+                <div class="logo-icon-box" style="width: 36px; height: 36px;">
+                    <div class="logo-icon-inner">
+                        <svg class="logo-icon-svg" style="width: 18px; height: 18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 4.5a2.5 2.5 0 0 0-4.96-.46 2.5 2.5 0 0 0-1.98 3 2.5 2.5 0 0 0-1.32 4.24 3 3 0 0 0 .34 5.58 2.5 2.5 0 0 0 2.96 3.08A2.5 2.5 0 0 0 12 19.5a2.5 2.5 0 0 0 4.96.46 2.5 2.5 0 0 0 1.98-3 2.5 2.5 0 0 0 1.32-4.24 3 3 0 0 0-.34-5.58 2.5 2.5 0 0 0-2.96-3.08A2.5 2.5 0 0 0 12 4.5z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="logo-text-group">
+                    <span class="logo-title" style="font-size: 18px;">Smart<span class="text-accent">Test</span></span>
+                    <span class="logo-subtitle">Платформа багатовимірного AI-профілювання та вердиктів</span>
+                </div>
+            </div>
+
+            <div class="footer-links">
+                <a href="#">Методологія аналізу</a>
+                <a href="#">Політика конфіденційності</a>
+                <a href="#">Умови використання</a>
+            </div>
+
+            <div class="footer-copy">
+                © 2026 SmartTest AI Profiling. Всі права захищені.
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
